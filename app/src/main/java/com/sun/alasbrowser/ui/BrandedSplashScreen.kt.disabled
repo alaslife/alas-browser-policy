@@ -1,0 +1,159 @@
+package com.sun.alasbrowser.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.fontResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.sun.alasbrowser.R
+
+/**
+ * Branded splash screen with Kelsi-fill custom font
+ * Premium branding appearance for app launch
+ */
+@Composable
+fun BrandedSplashScreen(
+    modifier: Modifier = Modifier
+) {
+    // Load Kelsi-fill custom font
+    val kelsiFillFont = remember {
+        FontFamily(
+            Font(R.font.kelsi_fill_otf, FontWeight.Normal)
+        )
+    }
+    
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(
+                brush = androidx.compose.foundation.LinearGradient(
+                    colors = listOf(
+                        Color(0xFF0F0F1E),  // Deep dark navy
+                        Color(0xFF1A1A3E)   // Slightly lighter navy
+                    )
+                )
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Animated glow effect (glass morphism backdrop)
+            Box(
+                modifier = Modifier
+                    .blur(radius = 30.dp)
+                    .background(
+                        color = Color(0xFF6366F1).copy(alpha = 0.15f),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(100.dp)
+                    )
+                    .height(300.dp)
+                    .fillMaxSize(0.3f)
+            )
+            
+            Spacer(modifier = Modifier.height(40.dp))
+            
+            // Main branding text with Kelsi-fill font
+            Text(
+                text = "Alas Browser",
+                style = TextStyle(
+                    fontFamily = kelsiFillFont,
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.White,
+                    letterSpacing = 2.sp
+                ),
+                modifier = Modifier
+                    .blur(radius = 0.5.dp)  // Minimal blur for premium look
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Tagline with subtle glass effect
+            Text(
+                text = "Fast • Secure • Private",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light,
+                    color = Color.White.copy(alpha = 0.7f),
+                    letterSpacing = 1.5.sp
+                )
+            )
+            
+            Spacer(modifier = Modifier.height(60.dp))
+            
+            // Loading indicator with glass morphism
+            Box(
+                modifier = Modifier
+                    .blur(radius = 8.dp)
+                    .background(
+                        color = Color.White.copy(alpha = 0.1f),
+                        shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+                    )
+                    .height(4.dp)
+                    .fillMaxSize(0.3f)
+            )
+            
+            Spacer(modifier = Modifier.height(40.dp))
+            
+            // Version or loading text
+            Text(
+                text = "Loading...",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Light,
+                    color = Color.White.copy(alpha = 0.5f)
+                )
+            )
+        }
+    }
+}
+
+/**
+ * Splash screen branding with Kelsi-fill font
+ * Composable version for use in any screen
+ */
+@Composable
+fun SplashBrandingText(
+    modifier: Modifier = Modifier
+) {
+    // Load Kelsi-fill custom font
+    val kelsiFillFont = remember {
+        FontFamily(
+            Font(R.font.kelsi_fill_otf, FontWeight.Normal)
+        )
+    }
+    
+    Text(
+        text = "Alas Browser",
+        style = TextStyle(
+            fontFamily = kelsiFillFont,
+            fontSize = 48.sp,
+            fontWeight = FontWeight.Normal,
+            color = Color.White,
+            letterSpacing = 1.5.sp
+        ),
+        modifier = modifier.blur(radius = 0.5.dp)
+    )
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Widget Colors - Dark -->
+    <!-- Material 3 Widget Colors - Dark -->
+    <color name="widget_surface">#2C2C2E</color>
+    <color name="widget_on_surface">#FFFFFF</color>
+    <color name="widget_on_surface_variant">#A0A0A0</color>
+    <color name="widget_primary_container">#8AB4F8</color>
+    <color name="widget_on_primary_container">#8AB4F8</color>
+    <color name="widget_outline">#424242</color>
+</resources>

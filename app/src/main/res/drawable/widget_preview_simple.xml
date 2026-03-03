@@ -1,0 +1,32 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="250dp"
+    android:height="72dp"
+    android:viewportWidth="250"
+    android:viewportHeight="72">
+    
+    <!-- Background -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M0,0h250v72H0z" />
+    
+    <!-- Search bar background -->
+    <path
+        android:fillColor="#303134"
+        android:pathData="M8,14h234c15.464,0 28,12.536 28,28s-12.536,28 -28,28H8V14z" />
+    
+    <!-- Search icon circle -->
+    <path
+        android:fillColor="#9AA0A6"
+        android:pathData="M30,42m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+    
+    <!-- Text placeholder -->
+    <path
+        android:fillColor="#9AA0A6"
+        android:pathData="M50,37h120v10H50z"
+        android:alpha="0.6" />
+    
+    <!-- Mic icon circle -->
+    <path
+        android:fillColor="#9AA0A6"
+        android:pathData="M220,42m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+</vector>

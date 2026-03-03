@@ -1,0 +1,60 @@
+! EasyPrivacy - Tracking Protection
+! Focused on blocking trackers, analytics, and privacy invasion
+
+! === Analytics & Tracking ===
+||google-analytics.com^
+||googletagmanager.com^
+||googletagservices.com^
+||stats.g.doubleclick.net^
+||analytics.google.com^
+
+! === Facebook Tracking ===
+||facebook.com/tr^
+||facebook.net^
+||connect.facebook.net^
+||facebook.com/ajax/bz^
+||facebook.com/plugins^
+||facebook.com/rsrc.php^
+
+! === Twitter/X Tracking ===
+||analytics.twitter.com^
+||pixel.twitter.com^
+||t.co^
+||ads-twitter.com^
+
+! === LinkedIn Tracking ===
+||linkedin.com/li/track^
+||linkedin.com/px^
+||ads.linkedin.com^
+
+! === Amazon Tracking ===
+||amazon-adsystem.com^
+||fls-na.amazon.com^
+||aax.amazon-adsystem.com^
+
+! === General Trackers ===
+||scorecardresearch.com^
+||quantserve.com^
+||chartbeat.com^
+||hotjar.com^
+||mouseflow.com^
+||crazyegg.com^
+||clicktale.com^
+||inspectlet.com^
+||lucky-orange.com^
+
+! === Ad Networks Tracking ===
+||moatads.com^
+||adsafeprotected.com^
+||doubleverify.com^
+||integral-marketing.com^
+
+! === Social Widgets ===
+||addthis.com^
+||sharethis.com^
+||po.st^
+
+! === Fingerprinting ===
+||cdn.jsdelivr.net/npm/fingerprintjs2^
+||fp.^
+||fingerprint^

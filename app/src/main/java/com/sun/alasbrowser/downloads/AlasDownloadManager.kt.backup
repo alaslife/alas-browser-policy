@@ -1,0 +1,818 @@
+package com.sun.alasbrowser.downloads
+
+import android.content.Context
+import android.os.Environment
+import android.widget.Toast
+import com.sun.alasbrowser.data.BrowserDatabase
+import com.sun.alasbrowser.data.BrowserPreferences
+import com.sun.alasbrowser.data.DownloadEntity
+import com.sun.alasbrowser.service.AlasDownloadService
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.File
+import java.io.RandomAccessFile
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
+import kotlin.coroutines.coroutineContext
+
+class AlasDownloadManager(private val context: Context) {
+
+    private val database = BrowserDatabase.getDatabase(context)
+    private val downloadDao = database.downloadDao()
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    
+    // Track active jobs
+    private val activeJobs = ConcurrentHashMap<Long, Job>()
+    
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(60, TimeUnit.SECONDS)
+        .retryOnConnectionFailure(true)
+        .build()
+
+    // For multi-threading
+    private val MAX_THREADS = 4
+    private val MAX_CONCURRENT_DOWNLOADS = 3
+
+    init {
+        // Restore active downloads or queue on app start? 
+        // For now, we'll just leave them as is, or maybe reset RUNNING to PENDING?
+        // Simple approach: do nothing, user must click resume if app killed.
+    }
+
+    fun startDownload(url: String, userAgent: String?, contentDisposition: String?, mimeType: String?, customFileName: String? = null, cookie: String? = null, referer: String? = null) {
+        android.util.Log.d("AlasDownloadManager", "=== START DOWNLOAD CALLED ===")
+        android.util.Log.d("AlasDownloadManager", "URL: $url")
+        android.util.Log.d("AlasDownloadManager", "User Agent: $userAgent")
+        android.util.Log.d("AlasDownloadManager", "Content-Disposition: $contentDisposition")
+        android.util.Log.d("AlasDownloadManager", "MIME Type: $mimeType")
+        android.util.Log.d("AlasDownloadManager", "Cookie: $cookie")
+        android.util.Log.d("AlasDownloadManager", "Referer: $referer")
+        
+        scope.launch {
+            try {
+                // Resolve filename using robust extractor
+                var fileName = customFileName ?: extractFileName(url, contentDisposition, mimeType)
+                android.util.Log.d("AlasDownloadManager", "Extracted filename: $fileName")
+                
+                // Use the Downloads directory
+                val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                if (!downloadDir.exists()) {
+                    downloadDir.mkdirs()
+                }
+                
+                var file = File(downloadDir, fileName)
+                var existingId: Long? = null
+                
+                // Check for existence and handle conflicts BEFORE creating any dummy files
+                if (file.exists()) {
+                     // Check if it's OUR file (in our DB)
+                     val existingEntity = downloadDao.getDownloadByPath(file.absolutePath)
+                     if (existingEntity != null) {
+                         if (existingEntity.status == DownloadEntity.STATUS_COMPLETED) {
+                             // It's our completed file. Generate unique name to keep history and not overwrite.
+                             fileName = getUniqueFileName(downloadDir, fileName)
+                             file = File(downloadDir, fileName)
+                         } else {
+                             // It's our partial download. Resume it.
+                             existingId = existingEntity.id
+                         }
+                     } else {
+                         // File exists but not in our DB. It belongs to user or another app.
+                         // We must use a unique name to avoid SecurityException and data loss.
+                         fileName = getUniqueFileName(downloadDir, fileName)
+                         file = File(downloadDir, fileName)
+                     }
+                }
+                
+                // If this is a new download (not resuming), create the file now to "reserve" it
+                // and ensure we have write ownership.
+                if (existingId == null) {
+                    try {
+                        file.createNewFile()
+                    } catch (e: Exception) {
+                         withContext(Dispatchers.Main) {
+                            Toast.makeText(context, "Cannot create file: ${e.message}", Toast.LENGTH_LONG).show()
+                         }
+                         return@launch
+                    }
+                }
+                
+                // Create or reuse download entry
+                val id = existingId ?: downloadDao.insert(
+                    DownloadEntity(
+                        url = url,
+                        title = fileName,
+                        fileName = fileName,
+                        mimeType = mimeType ?: "application/octet-stream",
+                        status = DownloadEntity.STATUS_PENDING,
+                        totalSize = 0L,
+                        downloadedSize = 0L,
+                        filePath = file.absolutePath, // Set path immediately
+                        timestamp = System.currentTimeMillis(),
+                        userAgent = userAgent ?: "AlasBrowser/1.0",
+                        cookies = cookie,
+                        referer = referer,
+                        description = ""
+                    )
+                )
+                
+                // Start download job
+                startDownloadJob(id, url, fileName, userAgent, cookie, referer)
+                
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Failed to start download: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun checkQueue() {
+        scope.launch {
+            try {
+                // Check how many are running
+                val runningCount = activeJobs.size
+                if (runningCount < MAX_CONCURRENT_DOWNLOADS) {
+                    // Find next pending download (FIFO or by Priority? Timestamp ASC usually for FIFO)
+                    // We need a method to get pending downloads. 
+                    // Since we don't have getPending in DAO yet, we'll need to fetch all or add method.
+                    // Let's use getDownloadsByStatus(STATUS_PENDING).
+                    val pending = downloadDao.getDownloadsByStatus(DownloadEntity.STATUS_PENDING)
+                        .sortedBy { it.timestamp } // Oldest first
+                    
+                    val slotsAvailable = MAX_CONCURRENT_DOWNLOADS - runningCount
+                    
+                    pending.take(slotsAvailable).forEach { entity ->
+                         // Double check it's not already running (shouldn't be if activeJobs matches)
+                         if (!activeJobs.containsKey(entity.id)) {
+                             startDownloadJob(entity.id, entity.url, entity.fileName, entity.userAgent, entity.cookies, entity.referer) 
+                         }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private val NETWORK_THREADS = 8 // FDM style: 8 threads
+    
+    // Speed tracking
+    private val downloadSpeeds = ConcurrentHashMap<Long, Long>() // ID -> speed in bytes/sec
+    private val lastBytesMap = ConcurrentHashMap<Long, Long>()
+    private val lastTimeMap = ConcurrentHashMap<Long, Long>()
+
+    // ... existing startDownloadJob ...
+    
+    // Updated capability check with GET fallback for robust multi-threading detection
+    private fun checkCapabilities(url: String, userAgent: String?, cookie: String?, referer: String?): Pair<Long, Boolean> {
+        // Helper to build request
+        fun buildRequest(method: String, range: String? = null): Request {
+             val prefs = BrowserPreferences(context)
+             val effectiveUrl = if (prefs.proxyEnabled && !url.contains("alas-proxy.onrender.com")) {
+                  "https://alas-proxy.onrender.com/proxy?url=" + java.net.URLEncoder.encode(url, "UTF-8")
+             } else {
+                 url
+             }
+             
+             return Request.Builder()
+                .url(effectiveUrl)
+                .method(method, null)
+                .header("User-Agent", userAgent ?: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36") // Fallback to a real UA
+                .apply {
+                    if (!cookie.isNullOrEmpty()) header("Cookie", cookie)
+                    if (!referer.isNullOrEmpty()) header("Referer", referer)
+                    if (range != null) header("Range", range)
+                    try {
+                        val uri = java.net.URI(url)
+                        val origin = "${uri.scheme}://${uri.host}"
+                        header("Origin", origin)
+                    } catch (e: Exception) {}
+                }
+                .build()
+        }
+
+        try {
+            // Try HEAD first (lightweight)
+            client.newCall(buildRequest("HEAD")).execute().use { response ->
+                val length = response.header("Content-Length")?.toLongOrNull() ?: -1L
+                val ranges = response.header("Accept-Ranges")
+                
+                if (response.isSuccessful || response.code == 206) {
+                    val supportsResume = ranges == "bytes" || response.code == 206
+                    if (length > 0) return Pair(length, supportsResume)
+                }
+            }
+        } catch (e: Exception) {
+            // Ignore and try fallback
+        }
+        
+        // Fallback: Try GET with Range: bytes=0-0 (Robust check)
+        try {
+            client.newCall(buildRequest("GET", "bytes=0-0")).execute().use { response ->
+                // Content-Range: bytes 0-0/123456
+                val contentRange = response.header("Content-Range")
+                val length = contentRange?.substringAfter("/")?.toLongOrNull() 
+                             ?: response.header("Content-Length")?.toLongOrNull() ?: -1L
+                
+                val supportsResume = response.code == 206
+                return Pair(length, supportsResume && length > 0)
+            }
+        } catch (e: Exception) {
+            return Pair(-1L, false)
+        }
+    }
+
+    private suspend fun startDownloadJob(id: Long, url: String, fileName: String, userAgent: String?, cookie: String?, referer: String?) {
+        val entity = downloadDao.getDownloadById(id) ?: return
+        
+        val job = scope.launch {
+            try {
+                AlasDownloadService.start(context)
+                downloadDao.updateStatus(id, DownloadEntity.STATUS_RUNNING)
+                
+                // Smart Capability Check (FDM style)
+                val (serverSize, supportsResume) = withContext(Dispatchers.IO) {
+                     checkCapabilities(url, userAgent, cookie, referer)
+                }
+                
+                var totalSize = if (serverSize > 0) serverSize else entity.totalSize
+                if (totalSize != entity.totalSize) {
+                    downloadDao.updateTotalSize(id, totalSize)
+                }
+                
+                // Trust the filePath set in startDownload if valid, else fallback to constructing one
+                val finalPath = if (entity.filePath.isNotBlank()) {
+                    entity.filePath 
+                } else {
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName).absolutePath
+                }
+                
+                // Ensure we update DB with final path just in case
+                if (entity.filePath != finalPath) {
+                    downloadDao.updateFilePath(id, finalPath)
+                }
+                
+                val file = File(finalPath)
+                
+                // In-memory progress tracker for smooth UI updates
+                val progressTracker = AtomicLong(entity.downloadedSize)
+                
+                // Speed Tracker
+                val speedJob = launch {
+                    var lastBytes = progressTracker.get()
+                    while (isActive) {
+                        val currentBytes = progressTracker.get()
+                        val diff = currentBytes - lastBytes
+                        // Simple 1 sec speed
+                        downloadSpeeds[id] = diff
+                        lastBytes = currentBytes
+                        // Update Service Notification with Speed
+                        updateServiceNotification(entity.title, currentBytes, totalSize, diff)
+                        delay(1000)
+                    }
+                }
+                
+                val success = if (supportsResume && totalSize > 5 * 1024 * 1024) { // > 5MB use multi-thread
+                     downloadMultiThreaded(entity, totalSize, cookie, referer, progressTracker)
+                } else {
+                     downloadSingleThreaded(entity, cookie, referer, progressTracker)
+                }
+                
+                speedJob.cancel()
+                
+                if (success >= 0) {
+                    // Update final state
+                    downloadDao.updateStatus(id, DownloadEntity.STATUS_COMPLETED)
+                    downloadDao.updateProgress(id, totalSize) // Ensure 100% in DB
+                     withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Download complete", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                if (e is CancellationException) {
+                     downloadDao.updateStatus(id, DownloadEntity.STATUS_PAUSED)
+                } else {
+                     downloadDao.updateStatus(id, DownloadEntity.STATUS_FAILED)
+                     withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Download failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                     }
+                }
+            } finally {
+                activeJobs.remove(id)
+                checkQueue()
+                if (activeJobs.isEmpty()) AlasDownloadService.stop(context)
+            }
+        }
+        activeJobs[id] = job
+    }
+
+    private suspend fun downloadSingleThreaded(entity: DownloadEntity, cookie: String?, referer: String?, progressTracker: AtomicLong): Long {
+        val file = File(entity.filePath)
+        var downloaded = 0L
+        
+        if (file.exists()) {
+            downloaded = file.length()
+             if (downloaded >= entity.totalSize && entity.totalSize > 0) return downloaded
+        }
+        
+        // Sync tracker start
+        progressTracker.set(downloaded)
+
+        // Apply Proxy Logic
+        val prefs = BrowserPreferences(context)
+        val effectiveUrl = if (prefs.proxyEnabled && !entity.url.contains("alas-proxy.onrender.com")) {
+             "https://alas-proxy.onrender.com/proxy?url=" + java.net.URLEncoder.encode(entity.url, "UTF-8")
+        } else {
+            entity.url
+        }
+
+        val request = Request.Builder()
+            .url(effectiveUrl)
+            .header("User-Agent", entity.userAgent ?: "")
+            .header("Range", "bytes=$downloaded-")
+            .apply {
+                if (!cookie.isNullOrEmpty()) {
+                    header("Cookie", cookie)
+                }
+            }
+            .build()
+            
+        return client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) {
+                if (response.code != 200 && response.code != 206) throw Exception("Network error: ${response.code}")
+            }
+            
+            val source = response.body?.byteStream() ?: throw Exception("No body")
+            val raf = RandomAccessFile(file, "rw")
+            raf.seek(downloaded)
+            
+            val buffer = ByteArray(64 * 1024) 
+            var bytesRead: Int
+            
+            var lastUpdate = System.currentTimeMillis()
+            
+            while (source.read(buffer).also { bytesRead = it } != -1) {
+                coroutineContext.ensureActive()
+                raf.write(buffer, 0, bytesRead)
+                downloaded += bytesRead
+                progressTracker.addAndGet(bytesRead.toLong())
+                
+                val now = System.currentTimeMillis()
+                if (now - lastUpdate > 1000) {
+                     downloadDao.updateProgress(entity.id, downloaded)
+                     lastUpdate = now
+                }
+            }
+            raf.close()
+            source.close()
+            downloaded
+        }
+    }
+
+    private suspend fun downloadMultiThreaded(entity: DownloadEntity, totalSize: Long, cookie: String?, referer: String?, progressTracker: AtomicLong): Long {
+         val file = File(entity.filePath)
+         if (!file.exists()) {
+              val raf = RandomAccessFile(file, "rw")
+              raf.setLength(totalSize)
+              raf.close()
+         }
+         
+         val chunkSize = totalSize / NETWORK_THREADS
+         val downloadedBytes = progressTracker // Use the shared tracker
+         
+         coroutineScope {
+             val jobs = (0 until NETWORK_THREADS).map { i ->
+                 async(Dispatchers.IO) {
+                     val start = i * chunkSize
+                     val end = if (i == NETWORK_THREADS - 1) totalSize - 1 else (start + chunkSize - 1)
+                     downloadPartWithRetry(entity.url, entity.filePath, start, end, downloadedBytes, entity.userAgent, cookie, referer, entity.id)
+                 }
+             }
+             jobs.awaitAll()
+         }
+         return totalSize
+    }
+
+    // FDM-like Part Downloader with Retry
+    private suspend fun downloadPartWithRetry(
+        url: String, 
+        path: String, 
+        start: Long, 
+        end: Long, 
+        totalTracker: AtomicLong, 
+        userAgent: String?, 
+        cookie: String?, 
+        referer: String?,
+        downloadId: Long
+    ) {
+        var currentPos = start
+        var attempts = 0
+        val maxRetries = 15 // Increased retries
+        
+        // We need to figure out resume pos for *this part* if we crashed. 
+        // For simplicity in this non-persistent-parts version, we just assume start or we'd be overwriting.
+        // Ideally we'd check file for non-zero bytes in this range or have a part-map.
+        // But since we don't have part-persistence yet, we assume we restart parts or rely on whatever's there?
+        // Actually, if we restart a part, we should seek correctly. 
+        // For now, let's just start from 'start' or 'currentPos'.
+        
+        while (currentPos <= end && attempts < maxRetries && coroutineContext.isActive) {
+            var bytesReadInThisAttempt = 0L
+            try {
+                // Apply Proxy Logic
+                val prefs = BrowserPreferences(context)
+                val effectiveUrl = if (prefs.proxyEnabled && !url.contains("alas-proxy.onrender.com")) {
+                     "https://alas-proxy.onrender.com/proxy?url=" + java.net.URLEncoder.encode(url, "UTF-8")
+                } else {
+                    url
+                }
+
+                val request = Request.Builder()
+                    .url(effectiveUrl)
+                    .header("User-Agent", userAgent ?: "AlasBrowser/1.0") 
+                    .header("Range", "bytes=$currentPos-$end")
+                    .apply {
+                        if (!cookie.isNullOrEmpty()) header("Cookie", cookie)
+                        if (!referer.isNullOrEmpty()) header("Referer", referer)
+                        try {
+                            val uri = java.net.URI(url)
+                            val origin = "${uri.scheme}://${uri.host}"
+                            header("Origin", origin)
+                        } catch (e: Exception) {}
+                    }
+                    .build()
+                
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful && response.code != 206) throw Exception("Net Error ${response.code}")
+                    
+                    val source = response.body?.byteStream() ?: throw Exception("No Body")
+                    val raf = RandomAccessFile(File(path), "rw")
+                    raf.seek(currentPos)
+                    
+                    val buffer = ByteArray(64 * 1024) // Larger buffer 64KB
+                    var bytes = 0
+                    
+                    val updateThreshold = 2 * 1024 * 1024L // 2MB
+                    var bytesSinceLastDbUpdate = 0L
+                    
+                    while (source.read(buffer).also { bytes = it } != -1) {
+                        coroutineContext.ensureActive()
+                        raf.write(buffer, 0, bytes)
+                        currentPos += bytes
+                        totalTracker.addAndGet(bytes.toLong())
+                        bytesReadInThisAttempt += bytes
+                        bytesSinceLastDbUpdate += bytes
+                        
+                        // Periodic DB update - throttled
+                        if (bytesSinceLastDbUpdate >= updateThreshold) {
+                             downloadDao.updateProgress(downloadId, totalTracker.get())
+                             bytesSinceLastDbUpdate = 0L
+                        }
+                    }
+                    raf.close()
+                }
+                // If successful exit loop
+                if (currentPos > end) break
+                
+            } catch (e: Exception) {
+                // If we made significant progress (> 512KB), reset attempts to give it more chances
+                // This prevents failing a large file just because of sparse disconnects over a long period.
+                if (bytesReadInThisAttempt > 512 * 1024) {
+                    attempts = 0 
+                } else {
+                    attempts++
+                }
+                
+                val backoff = (attempts * 1000L).coerceAtMost(10000L) // Max 10s wait
+                delay(backoff)
+                
+                if (attempts == maxRetries) throw e
+            }
+        }
+    }
+
+    private fun updateServiceNotification(title: String, downloaded: Long, total: Long, speedBytesPerSec: Long) {
+        // Send intent to service to update UI
+        val intent = android.content.Intent(context, AlasDownloadService::class.java).apply {
+            putExtra("title", title)
+            putExtra("progress", if (total > 0) ((downloaded * 100) / total).toInt() else -1)
+            putExtra("speed", formatSpeed(speedBytesPerSec))
+            // ETA
+            val etaSecs = if (speedBytesPerSec > 0) (total - downloaded) / speedBytesPerSec else -1
+            putExtra("eta", formatDuration(etaSecs))
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
+    }
+    
+    private fun formatSpeed(bytes: Long): String {
+        return if (bytes > 1024 * 1024) String.format("%.1f MB/s", bytes / (1024f * 1024f))
+        else String.format("%.0f KB/s", bytes / 1024f)
+    }
+    
+    private fun formatDuration(secs: Long): String {
+        return if (secs < 0) "--"
+        else if (secs > 3600) "${secs/3600}h ${(secs%3600)/60}m"
+        else "${secs/60}m ${secs%60}s"
+    }
+
+    fun pause(id: Long) {
+        activeJobs[id]?.cancel()
+    }
+    
+    fun resume(id: Long) {
+        scope.launch {
+            // Set to pending and let queue handle it
+            downloadDao.updateStatus(id, DownloadEntity.STATUS_PENDING)
+            checkQueue()
+        }
+    }
+    
+    fun cancel(id: Long) {
+        activeJobs[id]?.cancel()
+        // If it was pending but not running, we also need to just delete it
+        scope.launch {
+            downloadDao.deleteById(id)
+            val entity = downloadDao.getDownloadById(id)
+            entity?.let { File(it.filePath).delete() }
+            
+            // If we cancelled a running one, checkQueue is called in finally block of job.
+            // If we cancelled a pending one (not running), we should call checkQueue just in case? 
+            // Actually no need, because no slot opened up. But if it was taking a slot... activeJobs covers running.
+        }
+    }
+
+    /**
+     * Robust filename extractor that prioritizes Content-Disposition and URL segments
+     * to ensure files are saved with their original names ("as is").
+     */
+    fun extractFileName(url: String, contentDisposition: String?, mimeType: String?): String {
+        var fileName: String? = null
+        
+        // 1. Try to extract from Content-Disposition header (most reliable)
+        if (!contentDisposition.isNullOrBlank()) {
+            // Try filename*= (RFC 5987 - encoded filename)
+            val encodedPattern = Regex("""filename\*\s*=\s*(?:UTF-8''|utf-8'')([^;\s]+)""", RegexOption.IGNORE_CASE)
+            fileName = encodedPattern.find(contentDisposition)?.groupValues?.get(1)?.let {
+                try {
+                    java.net.URLDecoder.decode(it, "UTF-8")
+                } catch (e: Exception) {
+                    it
+                }
+            }
+            
+            // Try filename= with quotes
+            if (fileName.isNullOrBlank()) {
+                val quotedPattern = Regex("""filename\s*=\s*"([^"]+)"""", RegexOption.IGNORE_CASE)
+                fileName = quotedPattern.find(contentDisposition)?.groupValues?.get(1)?.let {
+                     try { java.net.URLDecoder.decode(it, "UTF-8") } catch (e: Exception) { it }
+                }
+            }
+            
+            // Try filename= without quotes
+            if (fileName.isNullOrBlank()) {
+                val unquotedPattern = Regex("""filename\s*=\s*([^;\s]+)""", RegexOption.IGNORE_CASE)
+                fileName = unquotedPattern.find(contentDisposition)?.groupValues?.get(1)?.let {
+                     try { java.net.URLDecoder.decode(it, "UTF-8") } catch (e: Exception) { it }
+                }
+            }
+        }
+        
+        // 2. Try to extract from URL path
+        if (fileName.isNullOrBlank()) {
+            try {
+                val uri = android.net.Uri.parse(url)
+                val path = uri.path
+                if (!path.isNullOrBlank()) {
+                    val lastSegment = path.substringAfterLast('/')
+                    // URL decode the segment
+                    val decodedSegment = try {
+                        java.net.URLDecoder.decode(lastSegment, "UTF-8")
+                    } catch (e: Exception) {
+                        lastSegment
+                    }
+                    // Only use if it looks like a filename
+                    if (!decodedSegment.startsWith("?")) {
+                        // Remove query parameters if any
+                        fileName = decodedSegment.substringBefore('?').substringBefore('#')
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignore URL parsing errors
+            }
+        }
+        
+        // 3. Fallback to URLUtil.guessFileName
+        if (fileName.isNullOrBlank()) {
+            fileName = android.webkit.URLUtil.guessFileName(url, contentDisposition, mimeType)
+        }
+        
+        // 4. Clean and validate the filename
+        // Replace invalid characters with underscore. 
+        // We also strip control characters and other non-printable characters to be safe.
+        fileName = fileName?.trim()?.replace(Regex("[\\\\/:*?\"<>|\\p{Cntrl}]"), "_") ?: "download"
+        
+        // Ensure it's not too long (Android max filename length is usually 255)
+        if (fileName!!.length > 200) {
+            fileName = fileName!!.substring(0, 200)
+            // Restore extension if it was cut off?
+            val ext = android.webkit.MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+            if (ext != null && !fileName!!.endsWith(ext)) {
+               fileName = fileName + "." + ext
+            }
+        }
+        
+        return fileName!!
+        
+        // 5. EXTENSION FIX: Ensure proper extension based on MIME type
+        // Modyolo and others often serve files like "Spotify v8.1.1" which looks like it has an extension (.1) but doesn't.
+        val extensionFromMime = android.webkit.MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+        
+        if (extensionFromMime != null) {
+            val currentExtension = fileName.substringAfterLast('.', "")
+            
+            // If no extension, or the current extension is not valid for this mime type (and not just a version number component)
+            // We check if the current suffix is NOT the expected extension.
+            // Also, we can check if the current "extension" is actually a known extension for this mime type.
+            // But simpler logic: if it doesn't end with the expected extension, append it? 
+            // Better: if it doesn't end with ANY valid extension for this mime type.
+            
+            // For now, let's just append if it doesn't end with the specific preferred extension.
+            // But we must be careful of "image.jpeg" vs "image.jpg".
+            // So we check if the file ends with the suggested one.
+            
+            // Special case for APKs which is the user's main issue
+            if (mimeType == "application/vnd.android.package-archive") {
+                if (!fileName.endsWith(".apk", ignoreCase = true)) {
+                    fileName = "$fileName.apk"
+                }
+            } else {
+                // General case
+                // If it doesn't have an extension, OR if the extension it has seems to be numeric (version) and mismatch
+                // Actually, simply appending the correct extension is usually safe if it's missing.
+                // But "image.jpg" -> "image.jpg.jpg" is bad.
+                
+                // Let's use MimeTypeMap to check if the current extension is valid for the given mimeType?
+                // MimeTypeMap doesn't support "getMimeTypeFromExtension" well in reverse for validation multiple exts.
+                
+                // Heuristic: If it doesn't end with the suggested extension, AND the suggested extension is not "bin"
+                if (!fileName.endsWith(".$extensionFromMime", ignoreCase = true)) {
+                     // Check if it ends with a common variation? 
+                     // For simplicity and fixing the reported issue:
+                     // If the filename has no dots, append.
+                     if (!fileName.contains('.')) {
+                         fileName = "$fileName.$extensionFromMime"
+                     } else {
+                         // It has dots (e.g. "ver.1.2"). Check if the last part is a known extension?
+                         // If we are unsure, appending is safer than having an unopenable file.
+                         // But we don't want "image.jpg.jpg".
+                         // So we checked specific suffix above.
+                         
+                         // If we are here, it has dots BUT didn't match the preferred extension.
+                         // e.g. "image.jpeg" (preferred .jpg) -> mismatch.
+                         // e.g. "app.v1" (preferred .apk) -> mismatch.
+                         
+                         // We should probably append if the last part is clearly NOT an extension.
+                         // Or just always append if it's not the preferred one, but that risks double extension for aliases (jpeg/jpg).
+                         
+                         // Re-check for APK specifically as that was the complaint. Done above.
+                         // For others, let's be conservative. If it looks like a version number (digits), append.
+                         if (currentExtension.all { it.isDigit() }) {
+                             fileName = "$fileName.$extensionFromMime"
+                         }
+                     }
+                }
+            }
+        }
+        
+        return fileName
+    }
+
+    private fun getUniqueFileName(dir: File, fileName: String): String {
+        var newName = fileName
+        var file = File(dir, newName)
+        var count = 1
+        
+        val nameWithoutExt = if (fileName.contains(".")) fileName.substringBeforeLast(".") else fileName
+        val ext = if (fileName.contains(".")) "." + fileName.substringAfterLast(".") else ""
+
+        while (file.exists()) {
+             newName = "$nameWithoutExt ($count)$ext"
+             file = File(dir, newName)
+             count++
+        }
+        return newName
+    }
+    
+    private fun getContentLength(url: String, userAgent: String?, referer: String?): Long {
+         // Apply proxy if enabled
+         val prefs = BrowserPreferences(context)
+         val effectiveUrl = if (prefs.proxyEnabled && !url.contains("alas-proxy.onrender.com")) {
+              "https://alas-proxy.onrender.com/proxy?url=" + java.net.URLEncoder.encode(url, "UTF-8")
+         } else {
+             url
+         }
+        
+         val request = Request.Builder()
+            .url(effectiveUrl)
+            .header("User-Agent", userAgent ?: "")
+            .apply {
+                if (!referer.isNullOrEmpty()) header("Referer", referer)
+            }
+            .head()
+            .build()
+            
+        return try {
+            client.newCall(request).execute().use { 
+                it.header("Content-Length")?.toLongOrNull() ?: -1L 
+            }
+        } catch (e: Exception) {
+            -1L
+        }
+    }
+    
+    companion object {
+        @Volatile
+        private var INSTANCE: AlasDownloadManager? = null
+        
+        fun getInstance(context: Context): AlasDownloadManager {
+             return INSTANCE ?: synchronized(this) {
+                AlasDownloadManager(context.applicationContext).also { INSTANCE = it }
+            }
+        }
+    }
+
+    /**
+     * Handles downloads from Base64 strings (used for Data URIs and Blob URLs via JS bridge).
+     */
+    fun downloadFromBase64(base64Data: String, mimeType: String, suggestedFilename: String?) {
+        scope.launch {
+            try {
+                // remove metadata header if present (e.g., "data:image/png;base64,")
+                val pureBase64 = if (base64Data.contains(",")) {
+                    base64Data.substringAfter(",")
+                } else {
+                    base64Data
+                }
+
+                val decodedBytes = android.util.Base64.decode(pureBase64, android.util.Base64.DEFAULT)
+                
+                // Determine filename
+                var fileName = suggestedFilename
+                if (fileName.isNullOrBlank()) {
+                    val ext = android.webkit.MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType) ?: "bin"
+                    fileName = "download_${System.currentTimeMillis()}.$ext"
+                }
+
+                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName)
+                
+                // Write to file
+                file.writeBytes(decodedBytes)
+
+                // Add to DB
+                val entity = DownloadEntity(
+                    url = "data:$mimeType...", // Truncated for display
+                    title = fileName,
+                    fileName = fileName,
+                    mimeType = mimeType,
+                    status = DownloadEntity.STATUS_COMPLETED, // Instant complete
+                    totalSize = decodedBytes.size.toLong(),
+                    downloadedSize = decodedBytes.size.toLong(),
+                    filePath = file.absolutePath,
+                    timestamp = System.currentTimeMillis(),
+                    userAgent = "AlasBrowser/Base64",
+                    description = "Base64 Download"
+                )
+                
+                val id = downloadDao.insert(entity)
+                
+                // Notify scan
+                android.media.MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null, null)
+                
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // Ideally log error to DB or UI
+            }
+        }
+    }
+}

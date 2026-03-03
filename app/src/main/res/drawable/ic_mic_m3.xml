@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material Symbols Rounded - Mic -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M480,560q-50,0 -85,-35t-35,-85v-200q0,-50 35,-85t85,-35q50,0 85,35t35,85v200q0,50 -35,85t-85,35ZM480,320ZM440,800v-116q-104,-14 -172,-93t-68,-179q0,-17 11.5,-28.5T240,372q17,0 28.5,11.5T280,412q0,83 58.5,141.5T480,612q83,0 141.5,-58.5T680,412q0,-17 11.5,-28.5T720,372q17,0 28.5,11.5T760,412q0,100 -68,179t-172,93v116q0,17 -11.5,28.5T480,840q-17,0 -28.5,-11.5T440,800ZM480,480q17,0 28.5,-11.5T520,440v-200q0,-17 -11.5,-28.5T480,200q-17,0 -28.5,11.5T440,240v200q0,17 11.5,28.5T480,480Z" />
+</vector>

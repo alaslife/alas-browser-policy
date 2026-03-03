@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="250dp"
+    android:height="56dp"
+    android:viewportWidth="250"
+    android:viewportHeight="56">
+    
+    <!-- Background rounded rectangle -->
+    <path
+        android:fillColor="#3C4043"
+        android:pathData="M0,28C0,12.536 12.536,0 28,0h194c15.464,0 28,12.536 28,28s-12.536,28 -28,28H28C12.536,56 0,43.464 0,28z" />
+    
+    <!-- App Logo circle placeholder -->
+    <path
+        android:fillColor="#8AB4F8"
+        android:pathData="M28,28m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
+    
+    <!-- Lens icon circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M186,28m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    
+    <!-- Mic icon circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M210,28m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    
+    <!-- Camera icon circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M234,28m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+</vector>

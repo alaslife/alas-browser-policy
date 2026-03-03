@@ -1,0 +1,129 @@
+! Aggressive Ads - Clickbait, Popups, Malware, Fake Downloads
+! Enhanced blocking for the worst offenders
+
+! === Clickbait Ad Networks ===
+||mgid.com^
+||taboola.com^
+||outbrain.com^
+||revcontent.com^
+||content.ad^
+||engageya.com^
+||gravity.com^
+||disqus.com/recommendations^
+||nativo.com^
+||sharethrough.com^
+||adblade.com^
+||newor.com^
+
+! === Popup Ad Networks ===
+||popads.net^
+||popcash.net^
+||popunder.net^
+||propellerads.com^
+||exoclick.com^
+||adcash.com^
+||clickadu.com^
+||hilltopads.net^
+||adsterra.com^
+||a-ads.com^
+||trafficjunky.com^
+||juicyads.com^
+||ero-advertising.com^
+||plugrush.com^
+||trafficshop.com^
+||adxpansion.com^
+||adtotal.pl^
+||directrev.com^
+||popunderduet.com^
+
+! === Malvertising Domains ===
+||malware.^
+||virus.^
+||trojan.^
+||exploit.^
+||doublepimp.com^
+||xxxcounter.com^
+||begun.ru^
+||redtram.com^
+||porngraph.com^
+||adultfriendfinder.com^
+
+! === Fake Download Button Ads ===
+||downloadbutton.^
+||download-now.^
+||free-download.^
+||softonic-download^
+||download.cnet.com/download^
+||download.chip.eu^
+
+! === Redirect/Adware Domains ===
+||redirect.^
+||redir.^
+||go.^$popup
+||link.^$popup
+||tracking.^
+||tr.^
+||clk.^
+||click.^$popup
+||gate.^
+||door.^
+||entry.^
+
+! === Scareware/Tech Support Scams ===
+||scareware.^
+||your-computer-is-infected^
+||windows-defender-alert^
+||microsoft-alert^
+||apple-support-alert^
+||virus-detected^
+||critical-update^
+
+! === Crypto Mining ===
+||coinhive.com^
+||coin-hive.com^
+||crypto-loot.com^
+||cryptoloot.pro^
+||minero.cc^
+||webminepool.com^
+||jsecoin.com^
+
+! === URL Shorteners Used for Ads ===
+||adf.ly^
+||j.gs^
+||q.gs^
+||u.bb^
+||linkbucks.com^
+||bc.vc^
+||short.st^
+
+! === Generic Patterns ===
+/clickbait.
+/popup.
+/popunder.
+/malware.
+/adware.
+/redirect?
+/redir?
+/gate?
+/download-button.
+/fake-download.
+-popup.
+-popunder.
+-malware.
+-adware.
+
+! === Element Hiding - Aggressive ===
+##.clickbait
+##.popup-ad
+##.pop-ad
+##.malvertising
+##.fake-download
+##.download-button-ad
+##[class*="clickbait"]
+##[class*="popup-overlay"]
+##[class*="pop-under"]
+##[href*="popads"]
+##[href*="popcash"]
+##[href*="exoclick"]
+##a[href*="download"][class*="ad"]
+##a[href*="click"][class*="ad"]

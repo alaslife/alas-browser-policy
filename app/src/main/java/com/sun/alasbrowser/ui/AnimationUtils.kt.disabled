@@ -1,0 +1,345 @@
+package com.sun.alasbrowser.ui
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+
+/**
+ * Smooth animation system for better interactions and motions
+ */
+
+// ============================================
+// ENTER ANIMATIONS
+// ============================================
+
+fun slideInFromLeft(): EnterTransition =
+    slideInHorizontally(
+        initialOffsetX = { -it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideInFromRight(): EnterTransition =
+    slideInHorizontally(
+        initialOffsetX = { it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideInFromTop(): EnterTransition =
+    slideInVertically(
+        initialOffsetY = { -it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideInFromBottom(): EnterTransition =
+    slideInVertically(
+        initialOffsetY = { it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f))
+
+fun scaleInSmooth(): EnterTransition =
+    scaleIn(
+        initialScale = 0.85f,
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMedium)
+    ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f))
+
+fun fadeInSmooth(): EnterTransition =
+    fadeIn(animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow))
+
+// ============================================
+// EXIT ANIMATIONS
+// ============================================
+
+fun slideOutToLeft(): ExitTransition =
+    slideOutHorizontally(
+        targetOffsetX = { -it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideOutToRight(): ExitTransition =
+    slideOutHorizontally(
+        targetOffsetX = { it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideOutToTop(): ExitTransition =
+    slideOutVertically(
+        targetOffsetY = { -it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f))
+
+fun slideOutToBottom(): ExitTransition =
+    slideOutVertically(
+        targetOffsetY = { it },
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+    ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f))
+
+fun scaleOutSmooth(): ExitTransition =
+    scaleOut(
+        targetScale = 0.85f,
+        animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMedium)
+    ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f))
+
+fun fadeOutSmooth(): ExitTransition =
+    fadeOut(animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow))
+
+// ============================================
+// SPRING ANIMATIONS
+// ============================================
+
+/**
+ * Smooth spring animation for 1 second
+ */
+fun springSmooth(): androidx.compose.animation.core.SpringSpec<Float> = spring(
+    dampingRatio = 0.85f,
+    stiffness = Spring.StiffnessLow
+)
+
+/**
+ * Quick spring animation for 300-400ms
+ */
+fun springQuick(): androidx.compose.animation.core.SpringSpec<Float> = spring(
+    dampingRatio = 0.75f,
+    stiffness = Spring.StiffnessMedium
+)
+
+/**
+ * Bouncy spring animation with gentle bounce
+ */
+fun springBouncy(): androidx.compose.animation.core.SpringSpec<Float> = spring(
+    dampingRatio = 0.6f,
+    stiffness = Spring.StiffnessMediumLow
+)
+
+// ============================================
+// CLICKABLE WITH SMOOTH ANIMATION
+// ============================================
+
+/**
+ * Makes element clickable with smooth scale animation on press
+ */
+fun Modifier.smoothClickable(
+    enabled: Boolean = true,
+    onClick: () -> Unit
+): Modifier = clickable(
+    enabled = enabled,
+    indication = rememberRipple(bounded = true),
+    interactionSource = remember { MutableInteractionSource() },
+    onClick = onClick
+)
+
+/**
+ * Makes element clickable with scale press animation
+ */
+fun Modifier.pressScaleClickable(
+    enabled: Boolean = true,
+    pressScale: Float = 0.95f,
+    onClick: () -> Unit
+): Modifier {
+    val scale = remember { Animatable(1f) }
+    
+    return this
+        .scale(scale.value)
+        .clickable(
+            enabled = enabled,
+            indication = rememberRipple(bounded = true),
+            interactionSource = remember { MutableInteractionSource() },
+            onClick = {
+                onClick()
+            }
+        )
+}
+
+// ============================================
+// ANIMATED VISIBILITY HELPERS
+// ============================================
+
+@Composable
+fun SmoothAnimatedVisibility(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    enter: EnterTransition = scaleInSmooth() + slideInFromTop(),
+    exit: ExitTransition = scaleOutSmooth() + slideOutToTop(),
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = enter,
+        exit = exit,
+        content = content
+    )
+}
+
+// ============================================
+// PULSE ANIMATION
+// ============================================
+
+@Composable
+fun PulseAnimation(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val scale = remember { Animatable(1f) }
+    
+    LaunchedEffect(Unit) {
+        while (true) {
+            scale.animateTo(1.05f, animationSpec = spring(dampingRatio = 0.75f))
+            scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.75f))
+        }
+    }
+    
+    androidx.compose.foundation.layout.Box(
+        modifier = modifier.scale(scale.value)
+    ) {
+        content()
+    }
+}
+
+// ============================================
+// SHIMMER LOADING ANIMATION
+// ============================================
+
+@Composable
+fun ShimmerAnimation(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val translation = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        translation.animateTo(
+            1f,
+            animationSpec = spring(
+                dampingRatio = 0.85f,
+                stiffness = Spring.StiffnessVeryLow
+            )
+        )
+    }
+    
+    androidx.compose.foundation.layout.Box(
+        modifier = modifier.graphicsLayer(
+            translationX = translation.value * 100f
+        )
+    ) {
+        content()
+    }
+}
+
+// ============================================
+// BOUNCE ANIMATION
+// ============================================
+
+@Composable
+fun BounceAnimation(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val offsetY = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        while (true) {
+            offsetY.animateTo(-10f, animationSpec = spring(dampingRatio = 0.6f))
+            offsetY.animateTo(0f, animationSpec = spring(dampingRatio = 0.6f))
+        }
+    }
+    
+    androidx.compose.foundation.layout.Box(
+        modifier = modifier.graphicsLayer(
+            translationY = offsetY.value
+        )
+    ) {
+        content()
+    }
+}
+
+// ============================================
+// FADE THROUGH ANIMATION
+// ============================================
+
+@Composable
+fun FadeThroughAnimation(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = fadeIn(animationSpec = spring(dampingRatio = 0.85f)),
+        exit = fadeOut(animationSpec = spring(dampingRatio = 0.85f)),
+        content = { content() }
+    )
+}
+
+// ============================================
+// SHARED AXIS ANIMATION (X)
+// ============================================
+
+@Composable
+fun SharedAxisXAnimation(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = slideInHorizontally(
+            initialOffsetX = { it / 2 },
+            animationSpec = spring(dampingRatio = 0.85f)
+        ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f)),
+        exit = slideOutHorizontally(
+            targetOffsetX = { -it / 2 },
+            animationSpec = spring(dampingRatio = 0.85f)
+        ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f)),
+        content = { content() }
+    )
+}
+
+// ============================================
+// SHARED AXIS ANIMATION (Y)
+// ============================================
+
+@Composable
+fun SharedAxisYAnimation(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = slideInVertically(
+            initialOffsetY = { it / 2 },
+            animationSpec = spring(dampingRatio = 0.85f)
+        ) + fadeIn(animationSpec = spring(dampingRatio = 0.85f)),
+        exit = slideOutVertically(
+            targetOffsetY = { -it / 2 },
+            animationSpec = spring(dampingRatio = 0.85f)
+        ) + fadeOut(animationSpec = spring(dampingRatio = 0.85f)),
+        content = { content() }
+    )
+}

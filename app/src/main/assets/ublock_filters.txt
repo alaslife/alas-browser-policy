@@ -1,0 +1,100 @@
+! uBlock Origin inspired filters - Embedded version
+! This is a curated subset of uBlock Origin's filters optimized for mobile
+
+! === Ad Servers ===
+||doubleclick.net^
+||googlesyndication.com^
+||googleadservices.com^
+||google-analytics.com^
+||googletagmanager.com^
+||googletagservices.com^
+
+! === Social Tracking ===
+||facebook.com/tr^
+||facebook.net^
+||connect.facebook.net^
+||analytics.twitter.com^
+||pixel.twitter.com^
+
+! === Ad Networks ===
+||adnxs.com^
+||advertising.com^
+||amazon-adsystem.com^
+||outbrain.com^
+||taboola.com^
+||revcontent.com^
+||criteo.com^
+||pubmatic.com^
+||rubiconproject.com^
+||openx.net^
+||casalemedia.com^
+||bidswitch.net^
+
+! === Popups & Malware ===
+||popads.net^
+||popcash.net^
+||propellerads.com^
+||exoclick.com^
+||juicyads.com^
+||trafficjunky.net^
+||adcash.com^
+||popunder^
+
+! === Analytics & Tracking ===
+||scorecardresearch.com^
+||quantserve.com^
+||chartbeat.com^
+||moatads.com^
+||addthis.com^
+||sharethis.com^
+
+! === More Ad Networks ===
+||2mdn.net^
+||adcolony.com^
+||adform.net^
+||adsafeprotected.com^
+||adtechus.com^
+||smartadserver.com^
+||yieldmo.com^
+||zedo.com^
+||media.net^
+||serving-sys.com^
+
+! === Mobile Specific ===
+||admob.com^
+||applovin.com^
+||mopub.com^
+||inmobi.com^
+||startappservice.com^
+||vungle.com^
+||unity3d.com/ads^
+||appsflyer.com^
+
+! === Generic Filters ===
+/ads.js
+/ad.js
+/advert.js
+/banner.js
+/ads/*
+/ad/*
+/advert/*
+/banner/*
+/pagead/*
+/sponsored/*
+
+! === Element Hiding ===
+##.ad
+##.ads
+##.adsbygoogle
+##.advertisement
+##.banner
+##.sponsored
+##[class*="ad-"]
+##[id*="ad-"]
+##[class*="advertisement"]
+##[class*="sponsor"]
+##.ad-container
+##.ad-wrapper
+##.popup
+##.pop-up
+##[class*="popup"]

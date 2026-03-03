@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Alas Browser</string>
+    <string name="search_hint">Alas Search…</string>
+    <string name="search_icon">Search icon</string>
+    <string name="voice_search">Voice search</string>
+    <string name="camera_search">Camera search</string>
+    
+    <!-- Add this missing string -->
+    <string name="widget_description">Alas Modern style search widget</string>
+    
+    <!-- You might also need these -->
+    <string name="widget_search_title">Search Widget</string>
+    <string name="voice_searcht">Voice search</string>
+    <string name="search">Search</string>
+    <string name="search_on_alas_browser">Search on Alas Browser</string>
+</resources>

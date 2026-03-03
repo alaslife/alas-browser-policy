@@ -1,0 +1,56 @@
+! Fanboy's Annoyance List - Block annoying elements
+! Cookie notices, social media widgets, newsletter popups, etc.
+
+! === Cookie Notices ===
+##.cookie-notice
+##.cookie-banner
+##.cookie-consent
+##.gdpr-banner
+##.gdpr-notice
+##[class*="cookie-bar"]
+##[id*="cookie-notice"]
+##[class*="gdpr"]
+
+! === Newsletter Popups ===
+##.newsletter-popup
+##.newsletter-modal
+##.subscribe-popup
+##[class*="newsletter-overlay"]
+##[id*="newsletter-popup"]
+
+! === Social Media Widgets ===
+##.social-share
+##.share-buttons
+##.social-icons
+##.fb-like
+##.twitter-follow
+##[class*="social-share"]
+
+! === Chat Widgets ===
+##.crisp-client
+##.intercom-app
+##[class*="live-chat"]
+##[id*="drift-widget"]
+##[id*="intercom"]
+
+! === Anti-Adblock Messages ===
+##.adblocker-notice
+##.adblock-notice
+##[class*="adblock-warning"]
+##[id*="adblock-msg"]
+
+! === Notification Prompts ===
+##.push-notification
+##.notification-prompt
+##[class*="push-subscribe"]
+
+! === Video Overlays ===
+##.video-overlay-ad
+##[class*="player-ad"]
+##.ytp-ce-element
+
+! === Sponsored Content Labels ===
+##.sponsored
+##.promoted
+##[class*="sponsored"]
+##[class*="promoted-content"]

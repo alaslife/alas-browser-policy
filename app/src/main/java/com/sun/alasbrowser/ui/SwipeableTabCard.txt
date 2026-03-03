@@ -1,0 +1,60 @@
+﻿@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@Composable
+fun SwipeableTabCard(
+    tab: BrowserTab,
+    isSelected: Boolean,
+    isGridView: Boolean,
+    onClick: () -> Unit,
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val dismissState = rememberDismissState(
+        confirmValueChange = {
+            if (it != SwipeToDismissBoxValue.Settled) {
+                onClose()
+                true
+            } else false
+        },
+        positionalThreshold = { it * 0.3f }
+    )
+    
+    SwipeToDismissBox(
+        state = dismissState,
+        backgroundContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 4.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+                                MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    Icons.Outlined.Delete,
+                    contentDescription = "Delete",
+                    tint = MaterialTheme.colorScheme.onError,
+                    modifier = Modifier.padding(end = 28.dp).size(36.dp)
+                )
+            }
+        },
+        enableDismissFromStartToEnd = false,
+        enableDismissFromEndToStart = true,
+        modifier = modifier
+    ) {
+        PerfectTabCard(
+            tab = tab,
+            isSelected = isSelected,
+            isGridView = isGridView,
+            onClick = onClick,
+            onClose = onClose
+        )
+    }
+}
+

@@ -1,0 +1,44 @@
+! Mobile-Specific Ad Blocking
+! Optimized for mobile ads and app promotion
+
+! === Mobile Ad Networks ===
+||admob.com^
+||admob.googleapis.com^
+||applovin.com^
+||mopub.com^
+||inmobi.com^
+||startappservice.com^
+||vungle.com^
+||unity3d.com/ads^
+||chartboost.com^
+||tapjoy.com^
+||fyber.com^
+||ironsrc.com^
+||adcolony.com^
+||smaato.com^
+||millennialmedia.com^
+
+! === Mobile Analytics ===
+||appsflyer.com^
+||adjust.com^
+||branch.io^
+||app-measurement.com^
+||firebase-settings.crashlytics.com^
+||firebaselogging-pa.googleapis.com^
+
+! === App Install Ads ===
+||app-ads.txt^
+||install.appsflyer.com^
+||googleads.g.doubleclick.net/mads^
+||imasdk.googleapis.com^
+
+! === Mobile Tracking ===
+||tracking.^
+||telemetry.^
+||metrics.^
+||events.^
+
+! === In-App Purchase Promotions ===
+##.iap-promo
+##.premium-upgrade
+##[class*="upgrade-banner"]

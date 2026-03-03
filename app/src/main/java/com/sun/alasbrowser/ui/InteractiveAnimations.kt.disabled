@@ -1,0 +1,411 @@
+package com.sun.alasbrowser.ui
+
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+
+/**
+ * Interactive animation components for better UX
+ */
+
+// ============================================
+// SMOOTH BUTTON WITH PRESS ANIMATION
+// ============================================
+
+@Composable
+fun SmoothButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val scale = remember { Animatable(1f) }
+    val interactionSource = remember { MutableInteractionSource() }
+    
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is PressInteraction.Press -> {
+                    scale.animateTo(0.95f, animationSpec = spring(dampingRatio = 0.75f))
+                }
+                is PressInteraction.Release -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+                is PressInteraction.Cancel -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+            }
+        }
+    }
+    
+    Button(
+        onClick = onClick,
+        modifier = modifier.scale(scale.value),
+        enabled = enabled,
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
+        )
+    ) {
+        content()
+    }
+}
+
+// ============================================
+// SMOOTH CARD WITH HOVER/PRESS EFFECT
+// ============================================
+
+@Composable
+fun SmoothCard(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val scale = remember { Animatable(1f) }
+    val interactionSource = remember { MutableInteractionSource() }
+    
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is PressInteraction.Press -> {
+                    scale.animateTo(0.97f, animationSpec = spring(dampingRatio = 0.80f))
+                }
+                is PressInteraction.Release -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+                is PressInteraction.Cancel -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+            }
+        }
+    }
+    
+    Box(
+        modifier = modifier
+            .scale(scale.value)
+            .blur(radius = 8.dp)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.8f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable(
+                enabled = enabled,
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+            .padding(16.dp)
+    ) {
+        content()
+    }
+}
+
+// ============================================
+// SMOOTH ICON BUTTON WITH ROTATION
+// ============================================
+
+@Composable
+fun SmoothIconButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    tint: Color = MaterialTheme.colorScheme.primary
+) {
+    val scale = remember { Animatable(1f) }
+    val interactionSource = remember { MutableInteractionSource() }
+    
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is PressInteraction.Press -> {
+                    scale.animateTo(0.85f, animationSpec = spring(dampingRatio = 0.75f))
+                }
+                is PressInteraction.Release -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+                is PressInteraction.Cancel -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+            }
+        }
+    }
+    
+    Box(
+        modifier = modifier
+            .scale(scale.value)
+            .clickable(
+                enabled = enabled,
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier
+        )
+    }
+}
+
+// ============================================
+// ANIMATED TAB INDICATOR
+// ============================================
+
+@Composable
+fun AnimatedTabIndicator(
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false
+) {
+    val scale = remember { Animatable(if (isSelected) 1f else 0f) }
+    
+    LaunchedEffect(isSelected) {
+        scale.animateTo(
+            if (isSelected) 1f else 0f,
+            animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMedium)
+        )
+    }
+    
+    Box(
+        modifier = modifier
+            .scale(scale.value)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(100.dp)
+            )
+            .height(4.dp)
+    )
+}
+
+// ============================================
+// LOADING SPINNER WITH SMOOTH MOTION
+// ============================================
+
+@Composable
+fun SmoothLoadingSpinner(
+    modifier: Modifier = Modifier,
+    size: androidx.compose.ui.unit.Dp = 48.dp,
+    strokeWidth: androidx.compose.ui.unit.Dp = 4.dp
+) {
+    val rotation = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        while (true) {
+            rotation.animateTo(
+                360f,
+                animationSpec = spring(
+                    dampingRatio = 0.85f,
+                    stiffness = Spring.StiffnessVeryLow
+                )
+            )
+            rotation.snapTo(0f)
+        }
+    }
+    
+    Box(
+        modifier = modifier
+            .blur(radius = 8.dp)
+            .background(
+                color = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.8f),
+                shape = RoundedCornerShape(size / 2)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .graphicsLayer(rotationZ = rotation.value),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+            strokeWidth = strokeWidth
+        )
+    }
+}
+
+// ============================================
+// SMOOTH FLOATING ACTION BUTTON
+// ============================================
+
+@Composable
+fun SmoothFloatingActionButton(
+    onClick: () -> Unit,
+    icon: ImageVector,
+    contentDescription: String? = null,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    val scale = remember { Animatable(1f) }
+    val interactionSource = remember { MutableInteractionSource() }
+    
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is PressInteraction.Press -> {
+                    scale.animateTo(0.9f, animationSpec = spring(dampingRatio = 0.75f))
+                }
+                is PressInteraction.Release -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+                is PressInteraction.Cancel -> {
+                    scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+                }
+            }
+        }
+    }
+    
+    Box(
+        modifier = modifier
+            .scale(scale.value)
+            .blur(radius = 10.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.85f),
+                shape = RoundedCornerShape(50.dp)
+            )
+            .clickable(
+                enabled = enabled,
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            )
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    }
+}
+
+// ============================================
+// SMOOTH CHECKBOX WITH BOUNCE
+// ============================================
+
+@Composable
+fun SmoothCheckbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scale = remember { Animatable(1f) }
+    
+    LaunchedEffect(checked) {
+        scale.animateTo(1.1f, animationSpec = spring(dampingRatio = 0.6f))
+        scale.animateTo(1f, animationSpec = spring(dampingRatio = 0.85f))
+    }
+    
+    Box(
+        modifier = modifier
+            .scale(scale.value)
+            .clickable { onCheckedChange(!checked) }
+    ) {
+        Checkbox(
+            checked = checked,
+            onCheckedChange = null
+        )
+    }
+}
+
+// ============================================
+// ANIMATED DIALOG CARD
+// ============================================
+
+@Composable
+fun AnimatedDialogCard(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    SmoothAnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = scaleInSmooth() + fadeIn(
+            animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMedium)
+        ),
+        exit = scaleOutSmooth() + fadeOut(
+            animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessMedium)
+        ),
+        content = {
+            Box(
+                modifier = Modifier
+                    .blur(radius = 15.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                        shape = RoundedCornerShape(24.dp)
+                    )
+                    .padding(24.dp)
+            ) {
+                content()
+            }
+        }
+    )
+}
+
+// ============================================
+// STAGGERED LIST ANIMATION HELPER
+// ============================================
+
+@Composable
+fun StaggeredListItem(
+    index: Int,
+    totalItems: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val offsetY = remember { Animatable(-20f) }
+    val alpha = remember { Animatable(0f) }
+    
+    LaunchedEffect(Unit) {
+        offsetY.animateTo(
+            0f,
+            animationSpec = spring(dampingRatio = 0.85f, stiffness = Spring.StiffnessLow)
+        )
+        alpha.animateTo(
+            1f,
+            animationSpec = spring(dampingRatio = 0.85f)
+        )
+    }
+    
+    Box(
+        modifier = modifier
+            .graphicsLayer(
+                translationY = offsetY.value,
+                alpha = alpha.value
+            )
+    ) {
+        content()
+    }
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AlasBrowser" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/splash_background_light</item>
+        <item name="android:navigationBarColor">@color/splash_background_light</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowBackground">@color/splash_background_light</item>
+        
+        <!-- Explicitly disable Action Bar and Title -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background_light</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.AlasBrowser</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+    </style>
+
+    <!-- Dark theme for WebView to enable prefers-color-scheme: dark -->
+    <style name="Theme.AlasBrowser.WebViewDark" parent="android:Theme.Material.NoActionBar">
+        <item name="android:isLightTheme">false</item>
+        <item name="android:forceDarkAllowed">true</item>
+    </style>
+
+</resources>
