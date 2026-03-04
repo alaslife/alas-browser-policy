@@ -17,8 +17,9 @@ This site is configured for **GitHub Pages**.
 1. Open repo: `alaslife/alas-browser-policy`.
 2. Go to **Settings > Pages**.
 3. Set **Source** to **GitHub Actions**.
-4. Push to `main` or `master`.
+4. Push to `main`.
 5. Wait for workflow `Deploy static site to GitHub Pages` to succeed.
 
 ## Contact email
 Policy contact email: `subhajitu51@gmail.com`.
+
