@@ -3,26 +3,21 @@
 This repository hosts the public policy website for ALAS Browser.
 
 ## Deploy target
-This site is configured for **Vercel** (not GitHub Pages).
+This site is configured for **GitHub Pages**.
+
+## Live URL
+`https://alaslife.github.io/alas-browser-policy/`
 
 ## Files
 - `index.html` - Privacy Policy and Terms page
-- `vercel.json` - Vercel routing and security headers
+- `.github/workflows/pages.yml` - Auto deploy workflow for GitHub Pages
 
-## Deploy steps (Vercel)
-1. Go to Vercel dashboard and click **Add New Project**.
-2. Import this GitHub repo: `alaslife/alas-browser-policy`.
-3. Framework preset: **Other**.
-4. Build command: leave empty.
-5. Output directory: leave empty.
-6. Deploy.
+## Deploy steps (GitHub Pages)
+1. Open this repo on GitHub: `alaslife/alas-browser-policy`.
+2. Go to **Settings > Pages**.
+3. Set **Source** to **GitHub Actions**.
+4. Push to `master` branch.
+5. Wait for the workflow named `Deploy static site to GitHub Pages` to finish.
 
-## Custom domain
-1. In Vercel project settings, open **Domains**.
-2. Add your domain (example: `policy.alasbrowser.com`).
-3. Set the DNS records shown by Vercel.
-4. Wait for SSL to be issued automatically.
-
-## Notes
-- Replace `YOUR_EMAIL_HERE` in `index.html` with your support email.
-- Any push to `main` triggers a new deployment.
+## Contact email
+Policy contact email is set to: `subhajitu51@gmail.com`.
