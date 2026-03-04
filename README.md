@@ -1,26 +1,28 @@
-# ALAS Browser (Open-Source Snapshot)
+﻿# ALAS Browser Policy Site
 
-ALAS Browser is an Android browser project (`com.sun.alasbrowser`) with a custom UI layer and WebView-based browsing engine.
+This repository hosts the public policy website for ALAS Browser.
 
-## Included in this public repo
-- App UI and Compose screens
-- Browser shell and navigation logic
-- WebView integration and settings
-- Theme/resources and reusable components
+## Deploy target
+This site is configured for **Vercel** (not GitHub Pages).
 
-## Not included
-- Signing keys (`*.jks`, `*.keystore`)
-- Firebase config secrets (`google-services.json`)
-- Local machine files and logs
+## Files
+- `index.html` - Privacy Policy and Terms page
+- `vercel.json` - Vercel routing and security headers
 
-## Legal and policy
-- In-app legal screen includes Privacy Policy, Terms, and Security disclosures.
-- Hosted policy page: `https://alaslife.github.io/alas-browser-policy/`
-- Google privacy policy: `https://policies.google.com/privacy`
+## Deploy steps (Vercel)
+1. Go to Vercel dashboard and click **Add New Project**.
+2. Import this GitHub repo: `alaslife/alas-browser-policy`.
+3. Framework preset: **Other**.
+4. Build command: leave empty.
+5. Output directory: leave empty.
+6. Deploy.
 
-## Build
-Use Android Studio or Gradle:
+## Custom domain
+1. In Vercel project settings, open **Domains**.
+2. Add your domain (example: `policy.alasbrowser.com`).
+3. Set the DNS records shown by Vercel.
+4. Wait for SSL to be issued automatically.
 
-```bash
-./gradlew :app:assembleDebug
-```
+## Notes
+- Replace `YOUR_EMAIL_HERE` in `index.html` with your support email.
+- Any push to `main` triggers a new deployment.
