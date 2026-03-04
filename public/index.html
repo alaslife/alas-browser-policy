@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ALAS Browser | Privacy Policy & Terms</title>
-  <meta name="description" content="Privacy Policy and Terms for ALAS Browser.">
+  <title>ALAS Browser | Privacy Policy and Terms of Use</title>
+  <meta name="description" content="Privacy Policy and Terms of Use for ALAS Browser.">
   <style>
     :root {
-      --bg: #f5f7fb;
+      --bg: #f4f7fb;
       --panel: #ffffff;
-      --text: #111827;
-      --muted: #4b5563;
-      --line: #d1d5db;
+      --ink: #0f172a;
+      --muted: #334155;
+      --line: #cbd5e1;
       --accent: #0f766e;
     }
 
@@ -20,121 +20,224 @@
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Arial, sans-serif;
-      background: radial-gradient(circle at top left, #e6fffa, var(--bg) 45%);
-      color: var(--text);
-      line-height: 1.65;
+      background: radial-gradient(circle at top left, #dcfce7, var(--bg) 42%);
+      color: var(--ink);
+      line-height: 1.7;
     }
 
     .wrap {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 18px;
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 0 16px;
     }
 
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.04);
-      padding: 26px;
+      box-shadow: 0 10px 24px rgba(2, 6, 23, 0.06);
+      padding: 28px;
     }
 
-    h1, h2, h3 { line-height: 1.3; }
-    h1 { margin-top: 0; font-size: 2rem; }
+    h1, h2, h3 { line-height: 1.35; color: #0b1220; }
+    h1 { margin: 0 0 8px; font-size: 2rem; }
     h2 {
       margin-top: 30px;
+      font-size: 1.2rem;
       border-left: 4px solid var(--accent);
       padding-left: 10px;
-      font-size: 1.25rem;
     }
+    h3 { margin-top: 14px; margin-bottom: 6px; font-size: 1rem; }
 
-    h3 { margin-bottom: 8px; font-size: 1rem; }
     p, li { color: var(--muted); }
 
-    .top-note {
+    .badge {
       display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
       background: #ecfeff;
       color: #0f766e;
       border: 1px solid #99f6e4;
-      border-radius: 999px;
-      padding: 6px 12px;
       font-size: .85rem;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      margin: 4px 0 16px;
+      font-size: .95rem;
+      color: #1e293b;
+    }
+
+    .toc {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .toc ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 28px;
     }
 
     a { color: #0f766e; }
-    hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+    code {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1px 6px;
+      color: #0f172a;
+    }
+
+    hr { border: 0; border-top: 1px solid var(--line); margin: 34px 0; }
+
+    @media (max-width: 740px) {
+      .toc ul { columns: 1; }
+      .card { padding: 20px; }
+    }
   </style>
 </head>
 <body>
   <main class="wrap">
     <article class="card">
-      <span class="top-note">Legal Page</span>
+      <span class="badge">Legal Documentation</span>
       <h1>ALAS Browser Privacy Policy</h1>
-      <p><strong>Effective Date:</strong> March 4, 2026</p>
+      <p class="meta"><strong>Effective Date:</strong> March 4, 2026<br><strong>Last Updated:</strong> March 4, 2026</p>
 
-      <h2>1. Information We Collect</h2>
-      <h3>Account Information</h3>
-      <p>When you create an account, we collect your email address and authentication information through Firebase Authentication.</p>
+      <section class="toc">
+        <strong>Contents</strong>
+        <ul>
+          <li>1. Scope</li>
+          <li>2. Data We Collect</li>
+          <li>3. How We Use Data</li>
+          <li>4. Legal Bases for Processing</li>
+          <li>5. Data Sharing and Processors</li>
+          <li>6. International Transfers</li>
+          <li>7. Data Retention</li>
+          <li>8. Security Measures</li>
+          <li>9. Your Rights</li>
+          <li>10. Children and Minors</li>
+          <li>11. Third-Party Websites</li>
+          <li>12. Cookies and Local Storage</li>
+          <li>13. Changes to This Policy</li>
+          <li>14. Contact</li>
+        </ul>
+      </section>
 
-      <h3>Local Data</h3>
+      <h2>1. Scope</h2>
+      <p>This Privacy Policy describes how ALAS Browser ("ALAS Browser", "we", "our", or "us") collects, uses, discloses, and safeguards information when you use the ALAS Browser mobile application and related services (collectively, the "Service").</p>
+
+      <h2>2. Data We Collect</h2>
+      <h3>2.1 Account and Authentication Data</h3>
+      <p>When you create or sign in to an account, we process account identifiers such as your email address and authentication metadata through Firebase Authentication.</p>
+
+      <h3>2.2 Locally Stored Browser Data</h3>
+      <p>The following information may be stored locally on your device depending on your settings and usage:</p>
       <ul>
-        <li>Browsing history (stored only on your device)</li>
-        <li>Cookies from visited websites</li>
-        <li>Downloaded files</li>
+        <li>Browsing history and tab/session data</li>
+        <li>Website cookies and local website storage</li>
+        <li>Bookmarks and browsing preferences</li>
+        <li>Downloaded files and download history</li>
       </ul>
 
-      <p>We do not sell or share your personal data.</p>
+      <h3>2.3 Technical and Diagnostic Data</h3>
+      <p>We may process limited technical data required to operate the Service, such as app version, device type, operating system version, and basic error diagnostics.</p>
 
-      <h2>2. Use of Firebase</h2>
-      <p>We use Firebase services provided by Google to manage user authentication.</p>
-      <p>Firebase may collect and process certain technical information according to Google’s Privacy Policy.</p>
-      <p>Learn more: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy</a></p>
-
-      <h2>3. Permissions Used</h2>
+      <h2>3. How We Use Data</h2>
+      <p>We process data to:</p>
       <ul>
-        <li>Internet: To load websites and connect to Firebase</li>
-        <li>Storage: To save downloaded files</li>
+        <li>Provide browser functionality and account sign-in</li>
+        <li>Maintain app stability, performance, and security</li>
+        <li>Detect abuse, fraud, and unauthorized activity</li>
+        <li>Comply with legal obligations and enforce terms</li>
       </ul>
 
-      <h2>4. Third-Party Websites</h2>
-      <p>ALAS Browser provides access to third-party websites. We are not responsible for their content or privacy practices.</p>
+      <h2>4. Legal Bases for Processing</h2>
+      <p>Where applicable under data protection laws, we rely on one or more of the following legal bases: performance of a contract, legitimate interests, legal obligations, and your consent (where required).</p>
 
-      <h2>5. Data Security</h2>
-      <p>All browsing is handled through Android WebView. Secure HTTPS connections are supported when available.</p>
+      <h2>5. Data Sharing and Processors</h2>
+      <p>We do not sell personal data. We may share data with service providers acting on our behalf, including Google Firebase for authentication and related cloud functionality. These providers are contractually required to process data in accordance with applicable laws and their contractual obligations.</p>
 
-      <h2>6. Children’s Privacy</h2>
-      <p>We do not knowingly collect personal data from children under 13.</p>
+      <h2>6. International Transfers</h2>
+      <p>Your data may be processed in countries other than your own, including where our service providers operate. Where required, we use appropriate safeguards for cross-border data transfers.</p>
 
-      <h2>7. Changes to This Policy</h2>
-      <p>We may update this policy. Updates will appear on this page.</p>
+      <h2>7. Data Retention</h2>
+      <p>We retain personal data only for as long as necessary to provide the Service, comply with legal obligations, resolve disputes, and enforce agreements. Locally stored browsing data remains on your device until you delete it or uninstall the app, subject to system behavior.</p>
 
-      <h2>8. Contact</h2>
-      <p>For questions: <code>subhajitu51@gmail.com</code></p>
+      <h2>8. Security Measures</h2>
+      <p>We implement reasonable technical and organizational measures designed to protect information against unauthorized access, alteration, disclosure, or destruction. No security method is completely infallible.</p>
+
+      <h2>9. Your Rights</h2>
+      <p>Depending on your jurisdiction, you may have rights to access, correct, delete, restrict, or object to processing of your personal data, and to request data portability. You may also have the right to withdraw consent where processing relies on consent.</p>
+      <p>To submit a request, contact us at <code>subhajitu51@gmail.com</code>.</p>
+
+      <h2>10. Children and Minors</h2>
+      <p>The Service is not directed to children under 13, and we do not knowingly collect personal data from children under 13. If you believe a child has provided personal data, contact us and we will take appropriate action.</p>
+
+      <h2>11. Third-Party Websites</h2>
+      <p>The Service allows access to third-party websites and services that we do not control. We are not responsible for the content, privacy practices, or policies of third-party properties.</p>
+
+      <h2>12. Cookies and Local Storage</h2>
+      <p>Websites viewed through the browser may use cookies, local storage, and similar technologies under those websites' own policies. You can manage related data through browser and device controls.</p>
+
+      <h2>13. Changes to This Policy</h2>
+      <p>We may revise this Privacy Policy periodically. Material changes will be reflected by updating the "Last Updated" date and posting the revised policy at this location.</p>
+
+      <h2>14. Contact</h2>
+      <p>If you have questions, requests, or complaints regarding this Privacy Policy, contact: <code>subhajitu51@gmail.com</code>.</p>
 
       <hr>
 
-      <h1>Terms and Conditions</h1>
+      <h1>ALAS Browser Terms of Use</h1>
+      <p class="meta"><strong>Effective Date:</strong> March 4, 2026</p>
 
-      <h2>1. Acceptance</h2>
-      <p>By using ALAS Browser, you agree to these Terms.</p>
+      <h2>1. Acceptance of Terms</h2>
+      <p>By downloading, accessing, or using the Service, you agree to be bound by these Terms of Use ("Terms"). If you do not agree, do not use the Service.</p>
 
-      <h2>2. Account Responsibility</h2>
-      <p>You are responsible for maintaining the confidentiality of your account credentials.</p>
+      <h2>2. Eligibility and Accounts</h2>
+      <p>You are responsible for maintaining accurate account information and safeguarding login credentials. You are responsible for activities occurring under your account.</p>
 
-      <h2>3. Prohibited Use</h2>
-      <p>You agree not to use the browser for illegal or harmful activities.</p>
+      <h2>3. License</h2>
+      <p>Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to use the Service for personal and lawful purposes.</p>
 
-      <h2>4. Third-Party Content</h2>
-      <p>We are not responsible for content accessed through external websites.</p>
+      <h2>4. Acceptable Use</h2>
+      <p>You agree not to use the Service to:</p>
+      <ul>
+        <li>Violate applicable law or regulations</li>
+        <li>Infringe intellectual property or privacy rights</li>
+        <li>Distribute malware, spam, or malicious code</li>
+        <li>Interfere with the security or operation of the Service</li>
+      </ul>
 
-      <h2>5. Limitation of Liability</h2>
-      <p>The app is provided "as is" without warranties.</p>
+      <h2>5. Third-Party Content and Services</h2>
+      <p>The Service may display or provide access to third-party content and websites. We do not endorse and are not responsible for third-party materials, availability, or practices.</p>
 
-      <h2>6. Updates</h2>
-      <p>We may modify these terms at any time.</p>
+      <h2>6. Intellectual Property</h2>
+      <p>The Service, including branding, interface elements, and software components, is protected by intellectual property laws. No rights are granted except as expressly stated in these Terms.</p>
+
+      <h2>7. Disclaimers</h2>
+      <p>The Service is provided on an "as is" and "as available" basis without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, and non-infringement, to the maximum extent permitted by law.</p>
+
+      <h2>8. Limitation of Liability</h2>
+      <p>To the maximum extent permitted by law, ALAS Browser and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of data, profits, or business arising from or related to your use of the Service.</p>
+
+      <h2>9. Indemnification</h2>
+      <p>You agree to defend, indemnify, and hold harmless ALAS Browser and its operators from claims, damages, liabilities, and expenses arising out of your misuse of the Service or violation of these Terms.</p>
+
+      <h2>10. Suspension and Termination</h2>
+      <p>We may suspend or terminate access to the Service, with or without notice, where required to protect users, comply with law, or enforce these Terms.</p>
+
+      <h2>11. Governing Law and Disputes</h2>
+      <p>These Terms are governed by applicable law in your jurisdiction, unless otherwise required by mandatory consumer protection laws. Any dispute will be resolved in a competent forum as permitted by applicable law.</p>
+
+      <h2>12. Changes to Terms</h2>
+      <p>We may update these Terms from time to time. Continued use of the Service after an update constitutes acceptance of the revised Terms.</p>
+
+      <h2>13. Contact</h2>
+      <p>Legal inquiries regarding these Terms may be sent to: <code>subhajitu51@gmail.com</code>.</p>
     </article>
   </main>
 </body>
 </html>
-
