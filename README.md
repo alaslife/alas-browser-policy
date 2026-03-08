@@ -10,6 +10,7 @@ This site is configured for **GitHub Pages**.
 
 ## Site files
 - `public/index.html` - Privacy Policy and Terms page
+- `public/delete-account.html` - Account deletion instructions
 - `public/.nojekyll` - ensures static passthrough
 - `.github/workflows/pages.yml` - Auto deploy workflow for GitHub Pages
 
