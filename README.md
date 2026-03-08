@@ -22,5 +22,9 @@ This site is configured for **GitHub Pages**.
 5. Wait for workflow `Deploy static site to GitHub Pages` to succeed.
 
 ## Contact email
-Policy contact email: `subhajitu51@gmail.com`.
+Policy contact email: `alaswebsun@gmail.com`.
+
+## Current policy baseline
+The current public build stores browser data locally on-device.
+Update the policy pages before enabling any live remote sync or backup feature.
 

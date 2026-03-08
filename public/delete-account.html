@@ -168,21 +168,21 @@
             <div class="info-box">
                 <h3>What happens when I delete my account?</h3>
                 <p>ALAS Browser keeps most browsing data on-device by default. Your account profile is stored in the
-                    app's local storage. If you use Secure Sync, encrypted backup data may remain on-device or may be
-                    stored in a separately configured sync backend for your signed-in account.</p>
+                    app's local storage. Current public builds do not provide a live cross-device browser sync
+                    service. If optional encrypted backup or sync is added in a future release, this page will be
+                    updated before or when that feature becomes available.</p>
                 <ul>
                     <li><strong>Your Profile Data:</strong> Your email address, display name, avatar reference, and
                         local account session are removed from the app.</li>
-                    <li><strong>Synced Backup Data:</strong> The app attempts to delete the encrypted backup tied to
-                        your account from the configured backup location available to this build.</li>
+                    <li><strong>Current Build Behavior:</strong> Account deletion currently clears the local account
+                        profile and local browser data stored on this device.</li>
                     <li><strong>Local Data Cleared:</strong> Account deletion clears local bookmarks, open tabs,
-                        browsing history, quick links, and sync preferences on this device.</li>
+                        browsing history, quick links, and local account preferences on this device.</li>
                     <li><strong>Not Automatically Cleared:</strong> Downloaded files stored outside the app, website
                         cookies and local site storage, and saved passwords or autofill entries may remain until you
                         remove them separately.</li>
                 </ul>
-                <p><em>Note: Account deletion is permanent and cannot be undone. Once an encrypted backup is deleted
-                        from the available backup location, it cannot be recovered by us.</em></p>
+                <p><em>Note: Account deletion is permanent and cannot be undone.</em></p>
             </div>
 
             <h2>How to delete your account inside the app</h2>
@@ -191,32 +191,30 @@
                 <li>Open ALAS Browser on your device.</li>
                 <li>Tap the <strong>Menu</strong> icon and go to <strong>Settings</strong>.</li>
                 <li>Navigate to the <strong>Account</strong> section.</li>
-                <li>Select <strong>Delete Account &amp; Data</strong> to remove the account, clear local account-linked
-                    browsing data, delete the configured backup for that account when available, and sign out of the
-                    app.</li>
+                <li>Select <strong>Delete Account &amp; Local Data</strong> to remove the account, clear local
+                    account-linked browsing data on this device, and sign out of the app.</li>
             </ol>
 
             <h2>Alternative Methods</h2>
             <p>If you no longer have the app installed, Android usually removes app-private local data from that
-                installation. However, uninstalling alone does not guarantee deletion of any remote account or
-                encrypted backup records that may exist for a configured sign-in or sync backend.</p>
+                installation. Current public builds do not provide live remote browser sync, so uninstalling normally
+                removes the app-private data stored for that installation.</p>
 
-            <p>If you want us to review or process a manual account, sync, analytics, or support deletion request, you
+            <p>If you want us to review or process a manual account, analytics, or support deletion request, you
                 can send an email to our support team:</p>
 
             <ul>
-                <li><strong>To:</strong> <code>subhajitu51@gmail.com</code></li>
+                <li><strong>To:</strong> <code>alaswebsun@gmail.com</code></li>
                 <li><strong>Subject:</strong> <code>Account Deletion Request - ALAS Browser</code></li>
             </ul>
 
-            <a href="mailto:subhajitu51@gmail.com?subject=Account%20Deletion%20Request%20-%20ALAS%20Browser"
+            <a href="mailto:alaswebsun@gmail.com?subject=Account%20Deletion%20Request%20-%20ALAS%20Browser"
                 class="action-button">Send Deletion Request Email</a>
 
             <h2>Data Retention Policy</h2>
             <p>Local app data remains on your device until you delete it, clear the account in the app, or uninstall
-                the app. If a configured remote sync backend was used, we aim to remove the backup tied to your account
-                when the in-app delete flow succeeds or when we process a valid manual request. Manual email requests
-                for remaining account-related or analytics-related records are handled within <strong>14 days</strong>.
+                the app. Current public builds do not use a live remote browser sync backend. Manual email requests for
+                remaining account-related or analytics-related records are handled within <strong>14 days</strong>.
                 Downloaded files saved to shared storage are not removed by an email request.</p>
 
             <div class="footer">
