@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.sun.alasbrowser",
+      "sha256_cert_fingerprints": [
+        "74:E6:A1:55:00:CE:93:63:90:32:21:24:43:53:79:4C:E3:AD:31:AC:E0:60:DF:8A:3F:8E:84:9B:0F:37:4A:30"
+      ]
+    }
+  }
+]
