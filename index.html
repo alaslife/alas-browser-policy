@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALAS Browser — Official Privacy Policy & Terms of Service</title>
-  <meta name="description" content="Official Privacy Policy and Terms of Service for ALAS Browser. Learn about our zero-telemetry architecture, local data storage, built-in ad blocking, R8 release optimizations, and security model.">
-  <meta name="keywords" content="ALAS Browser, Privacy Policy, Terms of Service, Android Browser, Zero Telemetry, Ad Blocker, Incognito, R8 Optimization">
+  <title>ALAS Browser — Privacy Policy & Terms of Use</title>
+  <meta name="description" content="Official Privacy Policy and Terms of Use for ALAS Browser. Learn how ALAS Browser protects your privacy with zero remote data collection and local-only storage.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://alaslife.github.io/alas-browser-policy/">
 
@@ -16,10 +15,9 @@
 
   <style>
     :root {
-      --bg-gradient: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --card-hover-border: rgba(56, 189, 248, 0.4);
+      --bg: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --card-border: rgba(255, 255, 255, 0.12);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-sub: #cbd5e1;
@@ -27,20 +25,15 @@
       --accent-glow: rgba(56, 189, 248, 0.2);
       --emerald: #34d399;
       --emerald-glow: rgba(52, 211, 153, 0.15);
-      --amber: #fbbf24;
       --code-bg: #090d16;
       --line: #334155;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg-gradient);
+      background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
       background-attachment: fixed;
       color: var(--text-main);
       line-height: 1.8;
@@ -48,10 +41,7 @@
       min-height: 100vh;
     }
 
-    .wrap {
-      max-width: 960px;
-      margin: 0 auto;
-    }
+    .wrap { max-width: 960px; margin: 0 auto; }
 
     header {
       text-align: center;
@@ -92,9 +82,6 @@
       margin-bottom: 14px;
       letter-spacing: -0.02em;
       line-height: 1.25;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .meta {
@@ -126,6 +113,20 @@
       margin-bottom: 36px;
     }
 
+    .highlight-box {
+      background: var(--emerald-glow);
+      border-left: 4px solid var(--emerald);
+      padding: 20px 24px;
+      border-radius: 10px;
+      margin: 24px 0;
+    }
+
+    .highlight-box p {
+      color: #f0fdf4;
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
     .toc {
       background: rgba(15, 23, 42, 0.7);
       border: 1px solid rgba(255, 255, 255, 0.1);
@@ -141,9 +142,6 @@
       font-size: 1rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .toc ul {
@@ -159,19 +157,11 @@
       font-size: 0.95rem;
       font-weight: 500;
       transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .toc a:hover {
-      color: var(--accent);
-      transform: translateX(3px);
-    }
+    .toc a:hover { color: var(--accent); }
 
-    section {
-      margin-bottom: 40px;
-    }
+    section { margin-bottom: 40px; }
 
     h2 {
       font-size: 1.45rem;
@@ -212,87 +202,19 @@
       margin-bottom: 18px;
     }
 
-    li {
-      margin-bottom: 8px;
-    }
+    li { margin-bottom: 8px; }
 
-    .highlight-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin: 24px 0;
-    }
-
-    .feature-card {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 20px;
-      transition: border-color 0.2s ease;
-    }
-
-    .feature-card:hover {
-      border-color: var(--card-hover-border);
-    }
-
-    .feature-card h4 {
+    a {
       color: var(--accent);
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+      text-decoration: none;
     }
 
-    .feature-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
+    a:hover { text-decoration: underline; }
 
-    .callout {
-      background: var(--emerald-glow);
-      border-left: 4px solid var(--emerald);
-      padding: 20px 24px;
-      border-radius: 10px;
-      margin: 24px 0;
-    }
-
-    .callout p {
-      color: #f0fdf4;
-      margin-bottom: 0;
-      font-weight: 500;
-    }
-
-    .permission-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-size: 0.925rem;
-    }
-
-    .permission-table th, .permission-table td {
-      padding: 12px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .permission-table th {
-      color: var(--accent);
-      font-weight: 700;
-      background: rgba(15, 23, 42, 0.6);
-    }
-
-    .permission-table td {
-      color: var(--text-sub);
-    }
-
-    code {
-      background: var(--code-bg);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      padding: 2px 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.875em;
-      color: #38bdf8;
+    .terms-header {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px dashed var(--line);
     }
 
     footer {
@@ -303,205 +225,227 @@
       border-top: 1px solid var(--line);
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
-
     @media (max-width: 640px) {
-      .card {
-        padding: 24px 18px;
-      }
-      h1 {
-        font-size: 1.85rem;
-      }
-      .toc ul {
-        grid-template-columns: 1fr;
-      }
+      .card { padding: 24px 18px; }
+      h1 { font-size: 1.85rem; }
+      .toc ul { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="badge">Official Application Policy & Build Spec</div>
-      <h1>ALAS Browser Policy & Privacy Terms</h1>
+      <div class="badge">Privacy First Architecture</div>
+      <h1>ALAS Browser Privacy Policy</h1>
       <div class="meta">
-        <span class="meta-tag"><strong>Target Release:</strong> July 2026 Build</span>
-        <span class="meta-tag"><strong>Architecture:</strong> Zero-Telemetry Privacy First</span>
-        <span class="meta-tag"><strong>R8 Minified:</strong> Enabled</span>
+        <span class="meta-tag"><strong>Effective Date:</strong> March 8, 2026</span>
+        <span class="meta-tag"><strong>Last Updated:</strong> July 31, 2026 (Zero-Data Build Update)</span>
       </div>
     </header>
 
     <main class="card">
+      <div class="highlight-box">
+        <p><strong>Zero Data Collection Core Commitment:</strong> This new build of ALAS Browser operates on a strict local-only privacy architecture. We do NOT collect personal data, track browsing history on remote servers, or run telemetry analytics. All browsing data stays on your local device.</p>
+      </div>
+
       <nav class="toc" aria-label="Table of Contents">
-        <div class="toc-title">Policy Directory</div>
+        <div class="toc-title">Contents</div>
         <ul>
-          <li><a href="#architecture">1. App Architecture & Privacy Core</a></li>
-          <li><a href="#zero-telemetry">2. Zero Telemetry & Metrics Opt-Out</a></li>
-          <li><a href="#local-data">3. Local Data Storage & Isolated Incognito</a></li>
-          <li><a href="#build-security">4. Build Security, R8 & Log Stripping</a></li>
-          <li><a href="#ad-blocking">5. Ad Blocking & Custom Filter Rules</a></li>
-          <li><a href="#permissions">6. Device Permissions & Transparency</a></li>
-          <li><a href="#backup-control">7. Data Retention & Backup Control</a></li>
-          <li><a href="#third-party">8. Open-Source Licenses & Notice</a></li>
-          <li><a href="#terms">9. Terms of Service & Acceptable Use</a></li>
-          <li><a href="#contact">10. Contact & Official Repository</a></li>
+          <li><a href="#scope">1. Scope</a></li>
+          <li><a href="#data-collection">2. Data We Process (Local-Only)</a></li>
+          <li><a href="#use-of-data">3. How We Use Data</a></li>
+          <li><a href="#legal-bases">4. Legal Bases for Processing</a></li>
+          <li><a href="#sharing">5. Data Sharing and Processors</a></li>
+          <li><a href="#transfers">6. International Transfers</a></li>
+          <li><a href="#retention">7. Data Retention & Local Control</a></li>
+          <li><a href="#security">8. Security Measures</a></li>
+          <li><a href="#rights">9. Your Rights</a></li>
+          <li><a href="#children">10. Children and Minors</a></li>
+          <li><a href="#third-party">11. Third-Party Websites</a></li>
+          <li><a href="#cookies">12. Cookies and Local Storage</a></li>
+          <li><a href="#changes">13. Changes to This Policy</a></li>
+          <li><a href="#contact">14. Contact</a></li>
+          <li><a href="#terms-of-use">ALAS Browser Terms of Use</a></li>
         </ul>
       </nav>
 
-      <section id="architecture">
-        <h2>1. App Architecture & Privacy Core</h2>
-        <p>ALAS Browser is built from the ground up as a high-performance, private, lightweight Android web browser. We believe that your web browsing activity, search queries, bookmarks, and preferences belong exclusively to you.</p>
-        
-        <div class="callout">
-          <p><strong>Core Guarantee:</strong> ALAS Browser does NOT operate central servers to track user activity, does NOT collect diagnostic device telemetry, and does NOT sell or monetize personal user data.</p>
-        </div>
-
-        <div class="highlight-grid">
-          <div class="feature-card">
-            <h4>🔒 Zero Remote Tracking</h4>
-            <p>No analytics SDKs, no behavioral fingerprinting, and no background reporting.</p>
-          </div>
-          <div class="feature-card">
-            <h4>⚡ R8 Build Optimized</h4>
-            <p>Compiled with advanced R8 minification, dead-code elimination, and resource shrinking.</p>
-          </div>
-          <div class="feature-card">
-            <h4>🕵️ Isolated Incognito Process</h4>
-            <p>Separate process sandbox for private browsing that leaves zero trace on your device.</p>
-          </div>
-          <div class="feature-card">
-            <h4>🛡️ Built-in Ad Blocker</h4>
-            <p>Host-based ad/tracker blocking with custom element picking and URL filter rules.</p>
-          </div>
-        </div>
+      <section id="scope">
+        <h2>1. Scope</h2>
+        <p>This Privacy Policy describes how ALAS Browser ("ALAS Browser", "we", "our", or "us") manages information when you use the ALAS Browser mobile application and related services (collectively, the "Service"). Unlike legacy browser builds, this application is engineered for zero remote data collection.</p>
       </section>
 
-      <section id="zero-telemetry">
-        <h2>2. Zero Telemetry & Metrics Opt-Out</h2>
-        <p>Unlike standard browsers that automatically transmit metrics back to analytics backends, ALAS Browser explicitly disables system and component telemetry:</p>
+      <section id="data-collection">
+        <h2>2. Data We Process (Local-Only)</h2>
+        <h3>2.1 Zero Remote Telemetry & Account Privacy</h3>
+        <p>This new build of ALAS Browser does NOT transmit your browsing activity, personal credentials, or usage metrics to our servers. WebView engine metrics are explicitly opted out via system configurations (<code>android.webkit.WebView.MetricsOptOut = true</code>).</p>
+
+        <h3>2.2 Locally Stored Browser Data</h3>
+        <p>The following information is stored strictly on your local device in app-private storage and is never uploaded to remote analytics services:</p>
         <ul>
-          <li><strong>WebView Metrics Opt-Out:</strong> The system application manifest explicitly defines <code>android.webkit.WebView.MetricsOptOut = true</code>, ensuring Google Android WebView engine metrics are disabled.</li>
-          <li><strong>No Diagnostic Tracking:</strong> ALAS Browser contains no Firebase Analytics, Google Analytics, or third-party telemetry frameworks.</li>
+          <li>Browsing history, open tabs, bookmarks, and quick links</li>
+          <li>Website cookies, HTTP cache, and local web storage</li>
+          <li>Saved passwords and form autofill data (stored locally if enabled)</li>
+          <li>Downloaded files, download history, and app preferences</li>
+        </ul>
+
+        <h3>2.3 Local Storage and Future Sync</h3>
+        <p>All bookmarks, tabs, browsing history, downloads, and preferences remain strictly on your Android device. Remote cloud sync is not active in this release. If optional encrypted cloud backup is introduced in future releases, users will receive explicit opt-in prompts before any data transfer takes place.</p>
+
+        <h3>2.4 Technical & Site Compatibility Data</h3>
+        <p>The app performs standard local operations to fetch public web resources, search queries (sent directly to your selected search engine), or local filter lists for ad blocking. No central user tracking or behavioral telemetry is processed.</p>
+      </section>
+
+      <section id="use-of-data">
+        <h2>3. How We Use Data</h2>
+        <p>Local data is processed on-device exclusively to:</p>
+        <ul>
+          <li>Provide core browsing, tab management, bookmarking, and file downloading</li>
+          <li>Store and restore your local browser preferences and custom search options</li>
+          <li>Block intrusive ads and trackers locally without sending request URLs to central servers</li>
+          <li>Ensure fast page rendering and offline resource caching</li>
         </ul>
       </section>
 
-      <section id="local-data">
-        <h2>3. Local Data Storage & Isolated Incognito</h2>
-        <h3>3.1 Persistent Local Data</h3>
-        <p>To provide standard browsing capabilities, the following data is saved locally on your Android device in app-private storage:</p>
-        <ul>
-          <li>Browsing history, open tab states, bookmarks, and quick links.</li>
-          <li>App display preferences, custom search engine configurations, and homepage settings.</li>
-          <li>Web cookies, HTTP cache, and HTML5 localStorage created by websites you visit.</li>
-          <li>Downloaded files and custom ad-blocking rules.</li>
-        </ul>
-
-        <h3>3.2 Dedicated Incognito Sandbox</h3>
-        <p>ALAS Browser features a dedicated Incognito Activity (<code>IncognitoBrowserActivity</code>) running in a separate isolated process (<code>:incognito</code>). Browsing sessions in Incognito Mode do not record history, do not save persistent cookies, and wipe transient cache immediately upon closing the tab session.</p>
+      <section id="legal-bases">
+        <h2>4. Legal Bases for Processing</h2>
+        <p>Where applicable under data protection laws, processing of local data relies on contract performance (delivering requested browser functionality) and your explicit consent for device permissions.</p>
       </section>
 
-      <section id="build-security">
-        <h2>4. Build Security, R8 & Log Stripping</h2>
-        <p>This release build of ALAS Browser incorporates rigorous security and compilation optimizations:</p>
-        <ul>
-          <li><strong>R8 Code & Resource Shrinking:</strong> Full R8 minification (`isMinifyEnabled = true`) and resource shrinking (`isShrinkResources = true`) strip dead code, unused drawables, and extraneous layouts, minimizing binary surface area.</li>
-          <li><strong>Production Log Stripping:</strong> All verbose, debug, info, and warning log statements (<code>Log.v</code>, <code>Log.d</code>, <code>Log.i</code>, <code>Log.w</code>) are stripped during compilation. Production releases emit no system logcat traces containing internal state or URLs.</li>
-          <li><strong>Protected Web Interfaces:</strong> Reflective JavaScript bridge methods are explicitly protected via <code>@JavascriptInterface</code> rules to preserve secure web-to-app interactions without exposing unintended internal APIs.</li>
-        </ul>
+      <section id="sharing">
+        <h2>5. Data Sharing and Processors</h2>
+        <p>We do NOT sell, rent, or share personal data. Network connections are initiated solely to fetch web pages, search queries, and media requested directly by you. Third-party websites and search engines receive standard HTTP headers necessary to render requested web content.</p>
       </section>
 
-      <section id="ad-blocking">
-        <h2>5. Ad Blocking & Custom Filter Rules</h2>
-        <p>ALAS Browser includes an integrated host-level and element-level ad blocker designed to protect your privacy and speed up web rendering:</p>
-        <ul>
-          <li>Filters known tracking domains, ad scripts, and pop-ups locally before requests are executed.</li>
-          <li>Includes an element picker interface allowing users to select and hide unwanted web elements on any web page.</li>
-          <li>All filter matching is executed locally on your device without sending URL queries to external servers.</li>
-        </ul>
+      <section id="transfers">
+        <h2>6. International Transfers</h2>
+        <p>ALAS Browser does not operate central user database servers. Web requests are routed directly to the web servers of the websites you choose to visit.</p>
       </section>
 
-      <section id="permissions">
-        <h2>6. Device Permissions & Transparency</h2>
-        <p>ALAS Browser requests Android system permissions strictly to deliver user-requested features. The application operates smoothly even if non-essential permissions are denied:</p>
-
-        <table class="permission-table">
-          <thead>
-            <tr>
-              <th>Permission</th>
-              <th>Purpose & Usage</th>
-              <th>Requirement</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>INTERNET</code></td>
-              <td>Enables web page navigation, web requests, and asset downloading.</td>
-              <td>Required for Browsing</td>
-            </tr>
-            <tr>
-              <td><code>CAMERA</code></td>
-              <td>Used by the built-in QR Code Scanner (CameraX) or for web file upload inputs when initiated by the user.</td>
-              <td>Optional (On-Demand)</td>
-            </tr>
-            <tr>
-              <td><code>POST_NOTIFICATIONS</code></td>
-              <td>Displays active download notifications and background file transfer status on Android 13+.</td>
-              <td>Optional (On-Demand)</td>
-            </tr>
-            <tr>
-              <td><code>ACCESS_FINE_LOCATION</code></td>
-              <td>Allows web pages to request your location (only if you explicitly grant permission per website prompt).</td>
-              <td>Optional (On-Demand)</td>
-            </tr>
-            <tr>
-              <td><code>RECORD_AUDIO</code></td>
-              <td>Enables HTML5 WebRTC audio or microphone inputs when requested by a website and approved by the user.</td>
-              <td>Optional (On-Demand)</td>
-            </tr>
-          </tbody>
-        </table>
+      <section id="retention">
+        <h2>7. Data Retention & Local Control</h2>
+        <p>All local browser data stays under your 100% control. You can clear history, cookies, cache, or app storage at any time via the in-app Privacy settings or Android App Settings &gt; Clear Storage. Automatic cloud backup is explicitly disabled (<code>allowBackup="false"</code>) to prevent unauthorized cloud sync.</p>
       </section>
 
-      <section id="backup-control">
-        <h2>7. Data Retention & Backup Control</h2>
-        <p>You maintain 100% control over all data generated during your browsing sessions:</p>
-        <ul>
-          <li><strong>Disabled Automatic Cloud Backup:</strong> <code>allowBackup="false"</code> is explicitly enforced in the application configuration to prevent automatic cloud backup of local browser history, cookies, or saved credentials to external cloud services.</li>
-          <li><strong>On-Demand Clearing:</strong> You can clear history, cookies, web storage, and cache at any time through the app settings or via Android App Settings &gt; Clear Storage.</li>
-        </ul>
+      <section id="security">
+        <h2>8. Security Measures</h2>
+        <p>We implement local Android app-sandboxing, process isolation for Incognito Mode (<code>:incognito</code>), and R8 minification with stripped debug logs (<code>Log.v/d/i/w</code>) to ensure maximum binary security.</p>
+      </section>
+
+      <section id="rights">
+        <h2>9. Your Rights</h2>
+        <p>Since ALAS Browser stores data locally on your device, you have full control to view, export, or permanently delete your browsing data directly within the app.</p>
+        <p>For questions or privacy inquiries, contact us at: <a href="mailto:alaswebsun@gmail.com">alaswebsun@gmail.com</a>.</p>
+      </section>
+
+      <section id="children">
+        <h2>10. Children and Minors</h2>
+        <p>The Service is a general-purpose web browser. We do not collect personal data from children or any other users.</p>
       </section>
 
       <section id="third-party">
-        <h2>8. Open-Source Licenses & Notice</h2>
-        <p>ALAS Browser utilizes vetted, open-source Android libraries and components, including AndroidX Jetpack, Kotlin Coroutines, OkHttp, Coil, JSoup, PermissionX, and ZXing. All third-party libraries remain governed by their respective open-source licenses (e.g., Apache 2.0, MIT, BSD).</p>
+        <h2>11. Third-Party Websites</h2>
+        <p>Websites visited through ALAS Browser operate under their own independent privacy policies and terms.</p>
       </section>
 
-      <section id="terms">
-        <h2>9. Terms of Service & Acceptable Use</h2>
-        <p>By downloading, installing, or using ALAS Browser, you agree to the following terms:</p>
-        <ul>
-          <li>ALAS Browser is provided "AS IS" without warranties of any kind, express or implied.</li>
-          <li>You agree not to use the browser for unlawful activities, unauthorized web scraping, or violating third-party network service policies.</li>
-          <li>The complete application binary and proprietary assets are protected under copyright and applicable software laws.</li>
-        </ul>
+      <section id="cookies">
+        <h2>12. Cookies and Local Storage</h2>
+        <p>You can block third-party cookies or clear local site storage anytime via the in-app Privacy settings.</p>
+      </section>
+
+      <section id="changes">
+        <h2>13. Changes to This Policy</h2>
+        <p>Any revisions to this Privacy Policy will be updated on this page with a revised "Last Updated" date.</p>
       </section>
 
       <section id="contact">
-        <h2>10. Contact & Official Repository</h2>
-        <p>For issue reporting, feedback, source code policies, or license inquiries, please visit our official GitHub repository:</p>
-        <p><strong>GitHub Repository:</strong> <a href="https://github.com/alaslife/alas-browser" target="_blank" rel="noopener noreferrer">https://github.com/alaslife/alas-browser</a></p>
+        <h2>14. Contact</h2>
+        <p>If you have questions regarding this Privacy Policy, contact: <a href="mailto:alaswebsun@gmail.com">alaswebsun@gmail.com</a>.</p>
       </section>
+
+      <div class="terms-header" id="terms-of-use">
+        <header>
+          <div class="badge">Legal Terms</div>
+          <h1>ALAS Browser Terms of Use</h1>
+          <div class="meta">
+            <span class="meta-tag"><strong>Effective Date:</strong> March 8, 2026</span>
+          </div>
+        </header>
+
+        <section id="terms-1">
+          <h2>1. Acceptance of Terms</h2>
+          <p>By downloading, accessing, or using the Service, you agree to be bound by these Terms of Use ("Terms"). If you do not agree, do not use the Service.</p>
+        </section>
+
+        <section id="terms-2">
+          <h2>2. Eligibility and Accounts</h2>
+          <p>You are responsible for maintaining accurate account information and safeguarding login credentials. You are responsible for activities occurring under your account.</p>
+        </section>
+
+        <section id="terms-3">
+          <h2>3. License</h2>
+          <p>Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to use the Service for personal and lawful purposes.</p>
+        </section>
+
+        <section id="terms-4">
+          <h2>4. Acceptable Use</h2>
+          <p>You agree not to use the Service to:</p>
+          <ul>
+            <li>Violate applicable law or regulations</li>
+            <li>Infringe intellectual property or privacy rights</li>
+            <li>Distribute malware, spam, or malicious code</li>
+            <li>Interfere with the security or operation of the Service</li>
+          </ul>
+        </section>
+
+        <section id="terms-5">
+          <h2>5. Third-Party Content and Services</h2>
+          <p>The Service may display or provide access to third-party content and websites. We do not endorse and are not responsible for third-party materials, availability, or practices.</p>
+        </section>
+
+        <section id="terms-6">
+          <h2>6. Intellectual Property</h2>
+          <p>The Service, including branding, interface elements, and software components, is protected by intellectual property laws. No rights are granted except as expressly stated in these Terms.</p>
+        </section>
+
+        <section id="terms-7">
+          <h2>7. Disclaimers</h2>
+          <p>The Service is provided on an "as is" and "as available" basis without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, and non-infringement, to the maximum extent permitted by law.</p>
+        </section>
+
+        <section id="terms-8">
+          <h2>8. Limitation of Liability</h2>
+          <p>To the maximum extent permitted by law, ALAS Browser and its operators shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of data, profits, or business arising from or related to your use of the Service.</p>
+        </section>
+
+        <section id="terms-9">
+          <h2>9. Indemnification</h2>
+          <p>You agree to defend, indemnify, and hold harmless ALAS Browser and its operators from claims, damages, liabilities, and expenses arising out of your misuse of the Service or violation of these Terms.</p>
+        </section>
+
+        <section id="terms-10">
+          <h2>10. Suspension and Termination</h2>
+          <p>We may suspend or terminate access to the Service, with or without notice, where required to protect users, comply with law, or enforce these Terms.</p>
+        </section>
+
+        <section id="terms-11">
+          <h2>11. Governing Law and Disputes</h2>
+          <p>These Terms are governed by applicable law in your jurisdiction, unless otherwise required by mandatory consumer protection laws. Any dispute will be resolved in a competent forum as permitted by applicable law.</p>
+        </section>
+
+        <section id="terms-12">
+          <h2>12. Changes to Terms</h2>
+          <p>We may update these Terms from time to time. Continued use of the Service after an update constitutes acceptance of the revised Terms.</p>
+        </section>
+
+        <section id="terms-13">
+          <h2>13. Contact</h2>
+          <p>Legal inquiries regarding these Terms may be sent to: <a href="mailto:alaswebsun@gmail.com">alaswebsun@gmail.com</a>.</p>
+        </section>
+      </div>
     </main>
 
     <footer>
-      <p>&copy; 2026 ALAS Browser. All rights reserved. | <a href="https://github.com/alaslife/alas-browser" target="_blank" rel="noopener">GitHub Project Page</a></p>
+      <p>&copy; 2026 ALAS Browser. All rights reserved. | Contact: <a href="mailto:alaswebsun@gmail.com">alaswebsun@gmail.com</a></p>
     </footer>
   </div>
 </body>
