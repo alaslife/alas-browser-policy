@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ALAS Browser — Privacy Policy & Terms of Use</title>
-  <meta name="description" content="Official Privacy Policy and Terms of Use for ALAS Browser. Learn how ALAS Browser protects your privacy with zero remote data collection and local-only storage.">
+  <meta name="description" content="Official Privacy Policy and Terms of Use for ALAS Browser. Learn how ALAS Browser protects your privacy with local-first storage and optional user-controlled sync backup.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://alaslife.github.io/alas-browser-policy/">
 
@@ -239,20 +239,20 @@
       <h1>ALAS Browser Privacy Policy</h1>
       <div class="meta">
         <span class="meta-tag"><strong>Effective Date:</strong> March 8, 2026</span>
-        <span class="meta-tag"><strong>Last Updated:</strong> July 31, 2026 (Zero-Data Build Update)</span>
+        <span class="meta-tag"><strong>Last Updated:</strong> August 1, 2026 (Optional Sync & Backup Update)</span>
       </div>
     </header>
 
     <main class="card">
       <div class="highlight-box">
-        <p><strong>Zero Data Collection Core Commitment:</strong> This new build of ALAS Browser operates on a strict local-only privacy architecture. We do NOT collect personal data, track browsing history on remote servers, or run telemetry analytics. All browsing data stays on your local device.</p>
+        <p><strong>Local-First Core Commitment:</strong> ALAS Browser stores browsing data on your device by default. We do not run advertising telemetry, sell personal data, or collect phone numbers. If you choose to use Sync & Backup, selected browser data is transmitted only to the sync server you configure.</p>
       </div>
 
       <nav class="toc" aria-label="Table of Contents">
         <div class="toc-title">Contents</div>
         <ul>
           <li><a href="#scope">1. Scope</a></li>
-          <li><a href="#data-collection">2. Data We Process (Local-Only)</a></li>
+          <li><a href="#data-collection">2. Data We Process</a></li>
           <li><a href="#use-of-data">3. How We Use Data</a></li>
           <li><a href="#legal-bases">4. Legal Bases for Processing</a></li>
           <li><a href="#sharing">5. Data Sharing and Processors</a></li>
@@ -271,13 +271,13 @@
 
       <section id="scope">
         <h2>1. Scope</h2>
-        <p>This Privacy Policy describes how ALAS Browser ("ALAS Browser", "we", "our", or "us") manages information when you use the ALAS Browser mobile application and related services (collectively, the "Service"). Unlike legacy browser builds, this application is engineered for zero remote data collection.</p>
+        <p>This Privacy Policy describes how ALAS Browser ("ALAS Browser", "we", "our", or "us") manages information when you use the ALAS Browser mobile application and related services (collectively, the "Service"). The application is engineered for local-first browsing, with optional user-controlled Sync & Backup.</p>
       </section>
 
       <section id="data-collection">
         <h2>2. Data We Process (Local-Only)</h2>
-        <h3>2.1 Zero Remote Telemetry & Account Privacy</h3>
-        <p>This new build of ALAS Browser does NOT transmit your browsing activity, personal credentials, or usage metrics to our servers. WebView engine metrics are explicitly opted out via system configurations (<code>android.webkit.WebView.MetricsOptOut = true</code>).</p>
+        <h3>2.1 No Remote Telemetry & Account Privacy</h3>
+        <p>ALAS Browser does not transmit your browsing activity, personal credentials, phone number, or usage metrics to advertising or analytics servers. WebView engine metrics are explicitly opted out via system configurations (<code>android.webkit.WebView.MetricsOptOut = true</code>).</p>
 
         <h3>2.2 Locally Stored Browser Data</h3>
         <p>The following information is stored strictly on your local device in app-private storage and is never uploaded to remote analytics services:</p>
@@ -288,10 +288,13 @@
           <li>Downloaded files, download history, and app preferences</li>
         </ul>
 
-        <h3>2.3 Local Storage and Future Sync</h3>
-        <p>All bookmarks, tabs, browsing history, downloads, and preferences remain strictly on your Android device. Remote cloud sync is not active in this release. If optional encrypted cloud backup is introduced in future releases, users will receive explicit opt-in prompts before any data transfer takes place.</p>
+        <h3>2.3 Optional Sync & Backup</h3>
+        <p>Sync & Backup is optional and user-controlled. If you configure a sync server and choose to back up your data, ALAS Browser may transmit bookmarks, browsing history, download records, selected browser settings, translation preferences, a sync user ID, a generated device ID, and an optional access token to that configured server. This data is used only to provide backup and restore functionality.</p>
 
-        <h3>2.4 Technical & Site Compatibility Data</h3>
+        <h3>2.4 Phone Numbers</h3>
+        <p>ALAS Browser does not request, read, collect, store, or transmit your phone number. The app does not declare Android phone-number permissions such as <code>READ_PHONE_STATE</code> or <code>READ_PHONE_NUMBERS</code>.</p>
+
+        <h3>2.5 Technical & Site Compatibility Data</h3>
         <p>The app performs standard local operations to fetch public web resources, search queries (sent directly to your selected search engine), or local filter lists for ad blocking. No central user tracking or behavioral telemetry is processed.</p>
       </section>
 
@@ -302,6 +305,7 @@
           <li>Provide core browsing, tab management, bookmarking, and file downloading</li>
           <li>Store and restore your local browser preferences and custom search options</li>
           <li>Block intrusive ads and trackers locally without sending request URLs to central servers</li>
+          <li>Back up and restore browser data when you manually configure and use Sync & Backup</li>
           <li>Ensure fast page rendering and offline resource caching</li>
         </ul>
       </section>
@@ -313,17 +317,17 @@
 
       <section id="sharing">
         <h2>5. Data Sharing and Processors</h2>
-        <p>We do NOT sell, rent, or share personal data. Network connections are initiated solely to fetch web pages, search queries, and media requested directly by you. Third-party websites and search engines receive standard HTTP headers necessary to render requested web content.</p>
+        <p>We do NOT sell or rent personal data. Network connections are initiated to fetch web pages, search queries, media requested directly by you, translation requests you start, and optional Sync & Backup requests to your configured server. Third-party websites and search engines receive standard HTTP headers necessary to render requested web content.</p>
       </section>
 
       <section id="transfers">
         <h2>6. International Transfers</h2>
-        <p>ALAS Browser does not operate central user database servers. Web requests are routed directly to the web servers of the websites you choose to visit.</p>
+        <p>Web requests are routed directly to the web servers of the websites you choose to visit. Optional Sync & Backup data is sent to the sync server URL you configure, which may be located in any region depending on your chosen server.</p>
       </section>
 
       <section id="retention">
         <h2>7. Data Retention & Local Control</h2>
-        <p>All local browser data stays under your 100% control. You can clear history, cookies, cache, or app storage at any time via the in-app Privacy settings or Android App Settings &gt; Clear Storage. Automatic cloud backup is explicitly disabled (<code>allowBackup="false"</code>) to prevent unauthorized cloud sync.</p>
+        <p>Local browser data stays under your control. You can clear history, cookies, cache, or app storage at any time via the in-app Privacy settings or Android App Settings &gt; Clear Storage. Sync & Backup is manually configured by you, and backup data can be removed from your configured server according to that server's controls. Automatic Android cloud backup is explicitly disabled (<code>allowBackup="false"</code>) to prevent unauthorized cloud sync.</p>
       </section>
 
       <section id="security">
