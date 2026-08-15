@@ -8,62 +8,60 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://alaslife.github.io/alas-browser-policy/">
 
-  <!-- Google Fonts: Inter -->
+  <!-- Google Fonts: Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.85);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-sub: #cbd5e1;
-      --accent: #38bdf8;
-      --accent-glow: rgba(56, 189, 248, 0.2);
-      --emerald: #34d399;
-      --emerald-glow: rgba(52, 211, 153, 0.15);
-      --code-bg: #090d16;
-      --line: #334155;
+      --background: #f8f5ec;
+      --surface: #fffbf4;
+      --surface-container: #efede3;
+      --surface-container-high: #e5e1d8;
+      --primary: #706c61;
+      --on-primary-container: #211f1a;
+      --primary-container: #dad5c9;
+      --secondary-container: #e8e1d2;
+      --outline: #80796c;
+      --outline-variant: #d1cabd;
+      --text-main: #302f2c;
+      --text-sub: #57534b;
+      --text-muted: #746f65;
+      --code-bg: #ece7dd;
+      --shadow: rgba(48, 47, 44, 0.14);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #0f172a 45%, #020617 100%);
-      background-attachment: fixed;
+      font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--background);
       color: var(--text-main);
-      line-height: 1.8;
-      padding: 32px 16px;
+      line-height: 1.72;
+      padding: 24px 16px;
       min-height: 100vh;
     }
 
-    .wrap { max-width: 960px; margin: 0 auto; }
+    .wrap { max-width: 1040px; margin: 0 auto; }
 
     header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 32px 20px 20px;
+      margin-bottom: 24px;
+      padding: 28px 8px 12px;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 18px;
-      border-radius: 9999px;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--accent);
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      box-shadow: 0 0 20px var(--accent-glow);
+      width: fit-content;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      font-size: 0.84rem;
+      font-weight: 500;
+      margin-bottom: 18px;
     }
 
     .badge::before {
@@ -71,77 +69,67 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 10px var(--emerald);
+      background: var(--primary);
     }
 
     h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 14px;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
+      max-width: 760px;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 16px;
+      line-height: 1.05;
     }
 
     .meta {
       color: var(--text-muted);
       font-size: 0.95rem;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
     .meta-tag {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 4px 12px;
-      border-radius: 6px;
+      background: var(--surface-container);
+      padding: 6px 12px;
+      border-radius: 999px;
       font-size: 0.875rem;
     }
 
     .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      padding: 44px;
-      margin-bottom: 36px;
+      background: var(--surface);
+      border-radius: 28px;
+      box-shadow: 0 4px 18px var(--shadow);
+      padding: clamp(24px, 5vw, 48px);
+      margin-bottom: 28px;
     }
 
     .highlight-box {
-      background: var(--emerald-glow);
-      border-left: 4px solid var(--emerald);
+      background: var(--secondary-container);
       padding: 20px 24px;
-      border-radius: 10px;
-      margin: 24px 0;
+      border-radius: 24px;
+      margin: 0 0 28px;
     }
 
     .highlight-box p {
-      color: #f0fdf4;
+      color: var(--text-main);
       margin-bottom: 0;
       font-weight: 500;
     }
 
     .toc {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
+      background: var(--surface-container);
+      border-radius: 24px;
       padding: 24px;
       margin-bottom: 40px;
     }
 
     .toc-title {
-      font-weight: 700;
-      color: var(--accent);
+      font-weight: 500;
+      color: var(--text-main);
       margin-bottom: 16px;
       font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     .toc ul {
@@ -156,20 +144,28 @@
       text-decoration: none;
       font-size: 0.95rem;
       font-weight: 500;
-      transition: all 0.2s ease;
+      border-radius: 999px;
+      display: inline-flex;
+      padding: 4px 8px;
+      margin-left: -8px;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .toc a:hover { color: var(--accent); }
+    .toc a:hover {
+      background: var(--surface-container-high);
+      color: var(--text-main);
+      text-decoration: none;
+    }
 
     section { margin-bottom: 40px; }
 
     h2 {
       font-size: 1.45rem;
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-main);
       margin-bottom: 18px;
       padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid var(--outline-variant);
       display: flex;
       align-items: center;
       gap: 12px;
@@ -178,16 +174,16 @@
     h2::before {
       content: "";
       display: inline-block;
-      width: 4px;
-      height: 22px;
-      background: linear-gradient(180deg, var(--accent), var(--emerald));
-      border-radius: 3px;
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
     }
 
     h3 {
       font-size: 1.15rem;
       font-weight: 600;
-      color: #e2e8f0;
+      color: var(--text-main);
       margin: 24px 0 10px;
     }
 
@@ -205,8 +201,9 @@
     li { margin-bottom: 8px; }
 
     a {
-      color: var(--accent);
+      color: var(--primary);
       text-decoration: none;
+      font-weight: 500;
     }
 
     a:hover { text-decoration: underline; }
@@ -214,7 +211,7 @@
     .terms-header {
       margin-top: 50px;
       padding-top: 30px;
-      border-top: 2px dashed var(--line);
+      border-top: 1px solid var(--outline-variant);
     }
 
     footer {
@@ -222,12 +219,22 @@
       color: var(--text-muted);
       font-size: 0.9rem;
       padding: 28px 0;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--outline-variant);
+    }
+
+    code {
+      background: var(--code-bg);
+      color: var(--text-main);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.92em;
     }
 
     @media (max-width: 640px) {
-      .card { padding: 24px 18px; }
-      h1 { font-size: 1.85rem; }
+      body { padding: 16px 10px; }
+      header { padding: 20px 6px 8px; }
+      .card { border-radius: 24px; padding: 22px 16px; }
+      .highlight-box, .toc { border-radius: 20px; padding: 18px; }
       .toc ul { grid-template-columns: 1fr; }
     }
   </style>
